@@ -12,7 +12,7 @@ const saveFavorites = (favs) => {
   localStorage.setItem('ms_favorites', JSON.stringify(favs));
 };
 
-function StoryCard({ story, onTogglePublish, onRead, onToggleFavorite, isFavorite, lang }) {
+function StoryCard({ story, onTogglePublish, onRead, onToggleFavorite, onDelete, isFavorite, lang }) {
   const [isPublic, setIsPublic]     = useState(story.isPublic);
   const [publishing, setPublishing] = useState(false);
   const [fav, setFav]               = useState(isFavorite);
@@ -148,6 +148,12 @@ function StoryCard({ story, onTogglePublish, onRead, onToggleFavorite, isFavorit
               ? (lang === 'tr' ? '🔒 Gizle' : '🔒 Hide')
               : (lang === 'tr' ? '🌍 Paylaş' : '🌍 Share')}
           </button>
+          <button
+            className="sc-btn sc-btn--delete"
+            onClick={() => onDelete(story._id, story.title)}
+            title={lang === 'tr' ? 'Masalı sil' : 'Delete story'}>
+            🗑️
+          </button>
         </div>
       </div>
     </div>
@@ -165,6 +171,8 @@ export default function MyStories() {
   const [totalPages, setTotalPages] = useState(1);
   const [activeTab, setActiveTab]   = useState('all'); // 'all' | 'favorites'
   const [favorites, setFavorites]   = useState(getFavorites);
+  const [deleteModal, setDeleteModal] = useState(null); // { id, title }
+  const [deleting, setDeleting]       = useState(false);
 
   // Sıralama + Filtreler
   const [sortBy, setSortBy]               = useState('new');
@@ -203,6 +211,29 @@ export default function MyStories() {
       const res = await api.patch(`/stories/${id}/publish`, { isPublic });
       return res.data.story.isPublic;
     } catch { return !isPublic; }
+  };
+
+  const handleDeleteRequest = (id, title) => {
+    setDeleteModal({ id, title });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteModal) return;
+    setDeleting(true);
+    try {
+      await api.delete(`/stories/${deleteModal.id}`);
+      setStories(prev => prev.filter(s => s._id !== deleteModal.id));
+      setFavorites(prev => {
+        const next = prev.filter(f => f !== deleteModal.id);
+        saveFavorites(next);
+        return next;
+      });
+      setDeleteModal(null);
+    } catch {
+      setDeleteModal(null);
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleToggleFavorite = (id, isFav) => {
@@ -363,7 +394,7 @@ export default function MyStories() {
             )}
             {activeTab === 'favorites' && (
               <p style={{ color: 'var(--ink-soft)', fontSize: '0.9rem' }}>
-                {lang === 'tr' ? 'Hikaye kartlarındaki ☆ yıldıza basarak favorine ekle!' : 'Tap the ☆ star on any story card to add it here!'}
+                {lang === 'tr' ? 'Masal kartlarındaki ☆ yıldıza basarak favorine ekle!' : 'Tap the ☆ star on any story card to add it here!'}
               </p>
             )}
           </div>
@@ -376,9 +407,37 @@ export default function MyStories() {
                 onTogglePublish={handleTogglePublish}
                 onRead={(id) => navigate(`/story/${id}`)}
                 onToggleFavorite={handleToggleFavorite}
+                onDelete={handleDeleteRequest}
                 isFavorite={favorites.includes(story._id)}
               />
             ))}
+          </div>
+        )}
+
+        {/* Silme Onay Modalı */}
+        {deleteModal && (
+          <div className="ms-modal-overlay" onClick={() => !deleting && setDeleteModal(null)}>
+            <div className="ms-modal" onClick={e => e.stopPropagation()}>
+              <div className="ms-modal-icon">🗑️</div>
+              <h3 className="ms-modal-title">
+                {lang === 'tr' ? 'Masalı Sil' : 'Delete Story'}
+              </h3>
+              <p className="ms-modal-body">
+                {lang === 'tr'
+                  ? <>«{deleteModal.title}» adlı masal kalıcı olarak silinecek. Bu işlem geri alınamaz.</>
+                  : <>«{deleteModal.title}» will be permanently deleted. This cannot be undone.</>}
+              </p>
+              <div className="ms-modal-actions">
+                <button className="ms-modal-btn ms-modal-btn--cancel"
+                  onClick={() => setDeleteModal(null)} disabled={deleting}>
+                  {lang === 'tr' ? 'İptal' : 'Cancel'}
+                </button>
+                <button className="ms-modal-btn ms-modal-btn--confirm"
+                  onClick={handleDeleteConfirm} disabled={deleting}>
+                  {deleting ? '⏳' : (lang === 'tr' ? 'Evet, Sil' : 'Yes, Delete')}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 

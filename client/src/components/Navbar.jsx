@@ -57,8 +57,8 @@ export default function Navbar() {
         <div className="navbar-links">
           {user ? (
             <>
-              <Link to="/"            className={`nav-link ${isActive('/') ? 'active' : ''}`}>{lang === 'tr' ? 'Hikaye Oluştur' : 'Create Story'}</Link>
-              <Link to="/explore"     className={`nav-link ${isActive('/explore') ? 'active' : ''}`}>{lang === 'tr' ? 'Paylaşılan Hikayeler' : 'Shared Stories'}</Link>
+              <Link to="/"            className={`nav-link ${isActive('/') ? 'active' : ''}`}>{lang === 'tr' ? 'Masal Oluştur' : 'Create Story'}</Link>
+              <Link to="/explore"     className={`nav-link ${isActive('/explore') ? 'active' : ''}`}>{lang === 'tr' ? 'Paylaşılan Masallar' : 'Shared Stories'}</Link>
               <Link to="/my-stories"  className={`nav-link ${isActive('/my-stories') ? 'active' : ''}`}>{t.nav.myStories}</Link>
 
             </>
@@ -67,7 +67,7 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('anasayfa')}    className="nav-link">{lang === 'tr' ? 'Anasayfa' : 'Home'}</button>
               <button onClick={() => scrollToSection('ozellikler')}  className="nav-link">{lang === 'tr' ? 'Özellikler' : 'Features'}</button>
               <button onClick={() => scrollToSection('nasil-calisir')} className="nav-link">{lang === 'tr' ? 'Nasıl Çalışır?' : 'How It Works'}</button>
-              <button onClick={() => scrollToSection('ornek')}       className="nav-link">{lang === 'tr' ? 'Örnek Hikaye' : 'Example'}</button>
+              <button onClick={() => scrollToSection('ornek')}       className="nav-link">{lang === 'tr' ? 'Örnek Masal' : 'Example'}</button>
               <button onClick={() => scrollToSection('iletisim')} className="nav-link">{lang === 'tr' ? 'İletişim' : 'Contact'}</button>
             </>
           )}
@@ -136,8 +136,8 @@ export default function Navbar() {
         <div className="mobile-menu">
           {user ? (
             <>
-              <Link to="/"           onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{lang === 'tr' ? 'Hikaye Oluştur' : 'Create Story'}</Link>
-              <Link to="/explore"    onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{lang === 'tr' ? 'Paylaşılan Hikayeler' : 'Shared Stories'}</Link>
+              <Link to="/"           onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{lang === 'tr' ? 'Masal Oluştur' : 'Create Story'}</Link>
+              <Link to="/explore"    onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{lang === 'tr' ? 'Paylaşılan Masallar' : 'Shared Stories'}</Link>
               <Link to="/my-stories" onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{t.nav.myStories}</Link>
 
               <Link to="/profile"    onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>👤 {lang === 'tr' ? 'Profilim' : 'My Profile'}</Link>
@@ -150,7 +150,7 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('anasayfa')}      className="nav-link">{lang === 'tr' ? 'Anasayfa' : 'Home'}</button>
               <button onClick={() => scrollToSection('ozellikler')}    className="nav-link">{lang === 'tr' ? 'Özellikler' : 'Features'}</button>
               <button onClick={() => scrollToSection('nasil-calisir')} className="nav-link">{lang === 'tr' ? 'Nasıl Çalışır?' : 'How It Works'}</button>
-              <button onClick={() => scrollToSection('ornek')}         className="nav-link">{lang === 'tr' ? 'Örnek Hikaye' : 'Example'}</button>
+              <button onClick={() => scrollToSection('ornek')}         className="nav-link">{lang === 'tr' ? 'Örnek Masal' : 'Example'}</button>
               <button onClick={() => scrollToSection('iletisim')} className="nav-link">{lang === 'tr' ? 'İletişim' : 'Contact'}</button>
               <hr className="mobile-divider" />
               <Link to="/login"    onClick={() => setMenuOpen(false)}>{t.nav.login}</Link>

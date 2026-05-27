@@ -28,7 +28,7 @@ export default function StoryReader() {
 
         navigate('/story-view', { state: { story: viewStory }, replace: true });
       } catch (err) {
-        alert(lang === 'tr' ? 'Hikaye yüklenemedi.' : 'Could not load story.');
+        alert(lang === 'tr' ? 'Masal yüklenemedi.' : 'Could not load story.');
         navigate(-1);
       }
     };

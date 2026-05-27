@@ -87,7 +87,7 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
         {badge && <span className={`ec-badge ${badge.cls}`}>{badge.label}</span>}
         <button className="ec-like-btn" onClick={handleLike}
           disabled={story.isAnonymized}
-          title={story.isAnonymized ? 'Anonim hikayeler beğenilemez' : undefined}>
+          title={story.isAnonymized ? 'Anonim masallar beğenilemez' : undefined}>
           <span>{liked ? '❤️' : '🤍'}</span>
           <span>{likeCount}</span>
         </button>
@@ -162,7 +162,7 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
         <div className="ec-footer">
           <button className="ec-heart-btn" onClick={handleLike}
             disabled={story.isAnonymized}
-            title={story.isAnonymized ? 'Anonim hikayeler beğenilemez' : undefined}>
+            title={story.isAnonymized ? 'Anonim masallar beğenilemez' : undefined}>
             <span>{liked ? '❤️' : '🤍'}</span>
             <span>{likeCount}</span>
           </button>
@@ -285,8 +285,8 @@ export default function Explore() {
       <div className="container">
 
         <div className="exp-header animate-fadeIn">
-          <h1 className="exp-title">{t.explore?.title || 'Paylaşılan Hikayeler'}</h1>
-          <p className="exp-subtitle">{t.explore?.subtitle || 'Topluluktan hikayeler'}</p>
+          <h1 className="exp-title">{t.explore?.title || 'Paylaşılan Masallar'}</h1>
+          <p className="exp-subtitle">{t.explore?.subtitle || 'Topluluktan masallar'}</p>
         </div>
 
         {/* Toolbar */}
@@ -298,6 +298,16 @@ export default function Explore() {
               {lang === 'tr' ? 'Tümü' : 'All'}
               <span className="exp-tab-count">{stories.length}</span>
             </button>
+
+            {/* Favorilerim filtre butonu — sadece giriş yapmış kullanıcılara */}
+            {user && (
+              <button
+                className={`exp-tab${showFavorites ? ' active' : ''}`}
+                onClick={handleToggleFavorites}>
+                ⭐ {lang === 'tr' ? 'Favorilerim' : 'My Favorites'}
+                {favoriteIds.size > 0 && <span className="exp-tab-count">{favoriteIds.size}</span>}
+              </button>
+            )}
 
             {/* Sırala */}
             <div className="exp-dropdown-wrap">
@@ -374,22 +384,12 @@ export default function Explore() {
                 </div>
               )}
             </div>
-
-            {/* Favorilerim filtre butonu — Filtrele'nin hemen yanında, sadece giriş yapmış kullanıcılara */}
-            {user && (
-              <button
-                className={`exp-tab${showFavorites ? ' active' : ''}`}
-                onClick={handleToggleFavorites}>
-                ⭐ {lang === 'tr' ? 'Favorilerim' : 'My Favorites'}
-                {favoriteIds.size > 0 && <span className="exp-tab-count">{favoriteIds.size}</span>}
-              </button>
-            )}
           </div>
 
           {/* Hikaye Paylaş — sağda */}
           {user && (
             <button className="exp-share-btn" onClick={() => navigate('/')}>
-              + {lang === 'tr' ? 'Hikaye Paylaş' : 'Share Story'}
+              + {lang === 'tr' ? 'Masal Paylaş' : 'Share Story'}
             </button>
           )}
         </div>
@@ -404,7 +404,7 @@ export default function Explore() {
             <div className="exp-empty-icon">☆</div>
             <h3>{lang === 'tr' ? 'Henüz favori yok' : 'No favorites yet'}</h3>
             <p>{lang === 'tr'
-              ? 'Henüz başka yazarlardan favoriye eklediğin bir hikaye yok. Hikaye kartlarındaki yıldız ikonuna basarak favorilere ekleyebilirsin.'
+              ? 'Henüz başka yazarlardan favoriye eklediğin bir masal yok. Masal kartlarındaki yıldız ikonuna basarak favorilere ekleyebilirsin.'
               : "You haven't saved any stories yet. Tap the star icon on a story card to add it to favorites."}</p>
           </div>
         )}
@@ -429,11 +429,11 @@ export default function Explore() {
         {!showFavorites && !loading && stories.length === 0 && (
           <div className="exp-empty animate-fadeIn">
             <div className="exp-empty-icon">🌟</div>
-            <h3>{t.explore?.empty || 'Henüz hikaye yok'}</h3>
-            <p>{lang === 'tr' ? 'Henüz paylaşılan hikaye yok. İlk paylaşan sen ol!' : 'No shared stories yet. Be the first!'}</p>
+            <h3>{t.explore?.empty || 'Henüz masal yok'}</h3>
+            <p>{lang === 'tr' ? 'Henüz paylaşılan masal yok. İlk paylaşan sen ol!' : 'No shared stories yet. Be the first!'}</p>
             {user && (
               <button className="btn btn-primary" onClick={() => navigate('/')}>
-                ✨ {lang === 'tr' ? 'Hikaye Oluştur' : 'Create Story'}
+                ✨ {lang === 'tr' ? 'Masal Oluştur' : 'Create Story'}
               </button>
             )}
           </div>

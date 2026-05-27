@@ -212,7 +212,7 @@ export default function BookViewer({ pages, title, characters, location, lang, t
           >
             {saving ? `⏳ ${t?.story?.saving || 'Kaydediliyor...'}` :
              saved  ? `✓ ${t?.story?.saved  || 'Kaydedildi'}`       :
-                      `💾 ${t?.story?.saveStory || 'Hikayelerime Kaydet'}`}
+                      `💾 ${t?.story?.saveStory || 'Masallarıma Kaydet'}`}
           </button>
         </div>
       )}

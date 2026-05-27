@@ -11,9 +11,9 @@ const stagger = (d=0) => ({ hidden:{}, visible:{transition:{staggerChildren:0.11
 const FEATURES = [
   { img:'/assets/landing/1.png', tr:['Sana Özel Masallar','Her masal yalnızca senin çocuğun için özel olarak yazılır.'], en:['Personalized Stories','Every story is uniquely written just for your child.'] },
   { img:'/assets/landing/2.png', tr:['Türkçe & İngilizce','İki dilde masal oluştur, dil gelişimini destekle.'], en:['Turkish & English','Create stories in two languages to support language development.'] },
-  { img:'/assets/landing/3.png', tr:['Yaşa Uygun İçerik','2-12 yaş arasındaki her çocuğa uygun hikayeler.'], en:['Age-Appropriate','Stories perfectly suited for children aged 2-12.'] },
+  { img:'/assets/landing/3.png', tr:['Yaşa Uygun İçerik','2-12 yaş arasındaki her çocuğa uygun masallar.'], en:['Age-Appropriate','Stories perfectly suited for children aged 2-12.'] },
   { img:'/assets/landing/4.png', tr:['Topluluk & Keşif','Diğer ailelerin masallarını keşfet ve en iyileri puanla.'], en:['Community & Explore','Discover stories from other families and rate the best.'] },
-  { img:'/assets/landing/5.png', tr:['Sesli Okuma','Hikayeni sesli dinle, uyku vaktini büyülü hale getir.'], en:['Read Aloud','Listen to your story and make bedtime magical.'] },
+  { img:'/assets/landing/5.png', tr:['Sesli Okuma','Masalını sesli dinle, uyku vaktini büyülü hale getir.'], en:['Read Aloud','Listen to your story and make bedtime magical.'] },
   { img:'/assets/landing/6.png', tr:['Güvenli & Reklamasız','Çocukların özgürce keşfedebileceği güvenli ortam.'], en:['Safe & Ad-Free','A secure child-friendly environment to explore.'] },
 ];
 
@@ -27,7 +27,7 @@ const HOW_STEPS = [
   {
     num:'2',
     darkImg:'/assets/landing/how_dark_2.png', lightImg:'/assets/landing/how_light_2.png',
-    tr:['Yapay Zeka Masalını Yazar','Yapay zekamız çocuğuna özel, benzersiz bir hikaye oluşturur.'],
+    tr:['Yapay Zeka Masalını Yazar','Yapay zekamız çocuğuna özel, benzersiz bir masal oluşturur.'],
     en:['AI Creates Your Story','Our AI crafts a unique, personalized story just for your child.'],
   },
   {
@@ -98,7 +98,7 @@ export default function LandingPage() {
         <div className="container">
           <motion.div className="lp-sec-head" initial="hidden" whileInView="visible" viewport={{once:true,margin:'-60px'}} variants={fadeUp()}>
             <h2>{lang==='tr' ? 'Neden Masalmatik?' : 'Why Masalmatik?'}</h2>
-            <p>{lang==='tr' ? 'Çocuğunuza büyülü bir hikaye deneyimi yaşatın.' : 'Give your child a magical storytelling experience.'}</p>
+            <p>{lang==='tr' ? 'Çocuğunuza büyülü bir masal deneyimi yaşatın.' : 'Give your child a magical storytelling experience.'}</p>
           </motion.div>
           <motion.div className="lp-feat-grid" initial="hidden" whileInView="visible" viewport={{once:true,margin:'-40px'}} variants={stagger(0.07)}>
             {FEATURES.map((f,i) => (
@@ -177,7 +177,7 @@ export default function LandingPage() {
               <div className="lp-showcase-meta-item">
                 <div className="lp-showcase-meta-avatar"><img src="/assets/landing/o3.png" alt="" /></div>
                 <div>
-                  <div className="lp-showcase-meta-label">{lang==='tr' ? 'Hikayeni oluştur' : 'Create your story'}</div>
+                  <div className="lp-showcase-meta-label">{lang==='tr' ? 'Masalını oluştur' : 'Create your story'}</div>
                   <div className="lp-showcase-meta-val">{lang==='tr' ? 'Oku & Dinle' : 'Courage & Kindness'}</div>
                 </div>
               </div>

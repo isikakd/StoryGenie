@@ -321,6 +321,87 @@
 }
 .sc-btn--ghost:hover { background: rgba(245,158,11,0.2); }
 .sc-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.sc-btn--delete {
+  flex: 0 0 auto;
+  background: rgba(239,68,68,0.1);
+  border: 2px solid rgba(239,68,68,0.25);
+  color: #dc2626;
+  padding: 7px 10px;
+}
+.sc-btn--delete:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.5); transform: translateY(-1px); }
+
+/* Silme Onay Modalı */
+.ms-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.15s ease;
+}
+.ms-modal {
+  background: var(--card-bg, #1e1b2e);
+  border: 1px solid rgba(200,185,255,0.15);
+  border-radius: 20px;
+  padding: 36px 32px 28px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  animation: slideUp 0.2s ease;
+}
+[data-theme="light"] .ms-modal {
+  background: #fff;
+  border-color: rgba(0,0,0,0.1);
+}
+.ms-modal-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.ms-modal-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--ink, #f0eaff);
+  margin: 0 0 10px;
+}
+.ms-modal-body {
+  font-size: 0.9rem;
+  color: var(--ink-soft, #aaa);
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+.ms-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.ms-modal-btn {
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.ms-modal-btn--cancel {
+  background: transparent;
+  border: 2px solid rgba(150,140,180,0.3);
+  color: var(--ink-soft, #888);
+}
+.ms-modal-btn--cancel:hover { background: rgba(0,0,0,0.06); }
+.ms-modal-btn--confirm {
+  background: #dc2626;
+  color: #fff;
+  min-width: 110px;
+}
+.ms-modal-btn--confirm:hover { background: #b91c1c; transform: translateY(-1px); }
+.ms-modal-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* Sayfalama */
 .ms-pagination {

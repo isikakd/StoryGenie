@@ -92,7 +92,7 @@ export default function BookOpeningTransition({ visible, storyReady, onComplete,
       className="bot-root"
       role="dialog"
       aria-modal="true"
-      aria-label={uiLang === 'tr' ? 'Hikaye oluşturuluyor' : 'Generating story'}
+      aria-label={uiLang === 'tr' ? 'Masal oluşturuluyor' : 'Generating story'}
       aria-live="polite"
     >
       {/* Kitap + parçacıklar + durum */}

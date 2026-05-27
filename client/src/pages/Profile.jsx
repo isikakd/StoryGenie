@@ -173,7 +173,7 @@ export default function Profile() {
                 <span className="prof-stat-icon">📖</span>
                 <div className="prof-stat-info">
                   <span className="prof-stat-val">{user?.stats?.totalStories || 0}</span>
-                  <span className="prof-stat-lbl">{tr ? 'Hikaye' : 'Stories'}</span>
+                  <span className="prof-stat-lbl">{tr ? 'Masal' : 'Stories'}</span>
                 </div>
               </div>
               <div className="prof-stat">
@@ -230,7 +230,7 @@ export default function Profile() {
               {/* Kendini ifade et */}
               <div className="prof-tip-box">
                 <div>
-                  <small>{tr ? 'Seçtiğin avatar hikaye kartlarında görünecek.' : 'Your avatar will appear on story cards.'}</small>
+                  <small>{tr ? 'Seçtiğin avatar masal kartlarında görünecek.' : 'Your avatar will appear on story cards.'}</small>
                 </div>
               </div>
             </div>
@@ -294,8 +294,8 @@ export default function Profile() {
 
           <div className="prof-notif-list">
             {[
-              { key: 'notifyOnLike',    label: tr ? 'Hikayelerime beğeni geldiğinde mail al'   : 'Email when my stories get liked',    desc: tr ? 'Biri masalını beğendiğinde haberdar ol.' : 'Get notified when someone likes your story.' },
-              { key: 'notifyOnComment', label: tr ? 'Hikayelerime yorum geldiğinde mail al'    : 'Email when my stories get comments',  desc: tr ? 'Yorum özelliği yakında eklenecek.'      : 'Comment feature coming soon.' },
+              { key: 'notifyOnLike',    label: tr ? 'Masallarıma beğeni geldiğinde mail al'   : 'Email when my stories get liked',    desc: tr ? 'Biri masalını beğendiğinde haberdar ol.' : 'Get notified when someone likes your story.' },
+              { key: 'notifyOnComment', label: tr ? 'Masallarıma yorum geldiğinde mail al'    : 'Email when my stories get comments',  desc: tr ? 'Yorum özelliği yakında eklenecek.'      : 'Comment feature coming soon.' },
               { key: 'notifyOnFollow',  label: tr ? 'Beni takip eden olduğunda mail al'        : 'Email when someone follows me',       desc: tr ? 'Takip özelliği yakında eklenecek.'      : 'Follow feature coming soon.' },
               { key: 'notifyMarketing', label: tr ? 'MasalMatik haberleri ve duyuruları'       : 'MasalMatik news and announcements',   desc: tr ? 'Yeni özellikler ve özel içerikler.'     : 'New features and special content.' },
             ].map(({ key, label, desc }) => (
@@ -379,10 +379,10 @@ export default function Profile() {
             {/* AŞAMA 1 — Hikaye tercihi (sadece public hikaye varsa gösterilir) */}
             {deleteStep === 1 && (
               <>
-                <h3 className="prof-modal-title">🗂 {tr ? 'Hikayelerine Ne Olsun?' : 'What About Your Stories?'}</h3>
+                <h3 className="prof-modal-title">🗂 {tr ? 'Masallarına Ne Olsun?' : 'What About Your Stories?'}</h3>
                 <p className="prof-modal-desc">
                   {tr
-                    ? `Hesabını silmek üzeresin. ${publicStoryCount} herkese açık hikayeniz için ne yapmak istersin?`
+                    ? `Hesabını silmek üzeresin. ${publicStoryCount} herkese açık masalın için ne yapmak istersin?`
                     : `You're about to delete your account. What should happen to your ${publicStoryCount} public stories?`}
                 </p>
 
@@ -392,8 +392,8 @@ export default function Profile() {
                       checked={storyAction === 'delete'}
                       onChange={() => setStoryAction('delete')} />
                     <div>
-                      <strong>🗑 {tr ? 'Tüm hikayelerimi sil' : 'Delete all my stories'}</strong>
-                      <span>{tr ? 'Paylaştığım hikayeler kalıcı olarak kaldırılsın.' : 'My published stories will be permanently removed.'}</span>
+                      <strong>🗑 {tr ? 'Tüm masallarımı sil' : 'Delete all my stories'}</strong>
+                      <span>{tr ? 'Paylaştığım masallar kalıcı olarak kaldırılsın.' : 'My published stories will be permanently removed.'}</span>
                     </div>
                   </label>
                   <label className={`prof-delete-choice ${storyAction === 'anonymize' ? 'selected' : ''}`}>
@@ -401,8 +401,8 @@ export default function Profile() {
                       checked={storyAction === 'anonymize'}
                       onChange={() => setStoryAction('anonymize')} />
                     <div>
-                      <strong>👤 {tr ? 'Hikayelerim kalsın (anonim)' : 'Keep stories (anonymous)'}</strong>
-                      <span>{tr ? 'Hikayelerim platformda kalsın ama adımla bağlantısı kesilsin.' : 'Stories remain but disconnected from my name.'}</span>
+                      <strong>👤 {tr ? 'Masallarım kalsın (anonim)' : 'Keep stories (anonymous)'}</strong>
+                      <span>{tr ? 'Masallarım platformda kalsın ama adımla bağlantısı kesilsin.' : 'Stories remain but disconnected from my name.'}</span>
                     </div>
                   </label>
                 </div>

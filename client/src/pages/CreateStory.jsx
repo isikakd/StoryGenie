@@ -283,7 +283,7 @@ export default function CreateStory() {
                 {lang === 'tr' ? 'Macera Mekanını Seç' : 'Choose the Adventure Location'}
               </h1>
               <p className="step-sub">
-                {lang === 'tr' ? 'Hikaye nerede geçsin?' : 'Where does the story take place?'}
+                {lang === 'tr' ? 'Masal nerede geçsin?' : 'Where does the story take place?'}
               </p>
             </div>
             <div className="loc-grid">
@@ -323,7 +323,7 @@ export default function CreateStory() {
                 {lang === 'tr' ? 'Son Dokunuşlar' : 'Final Touches'}
               </h1>
               <p className="step-sub">
-                {lang === 'tr' ? 'Hikayeni özelleştir ve oluştur!' : 'Customize and generate your story!'}
+                {lang === 'tr' ? 'Masalını özelleştir ve oluştur!' : 'Customize and generate your story!'}
               </p>
             </div>
 
@@ -401,7 +401,7 @@ export default function CreateStory() {
               <div className="step3-left">
                 <div className="step3-prompt-card">
                   <span className="step3-prompt-label">
-                    {lang === 'tr' ? 'hikayeye yön ver' : 'guide the story'}
+                    {lang === 'tr' ? 'masala yön ver' : 'guide the story'}
                   </span>
                   <textarea className="prompt-input step3-textarea"
                     placeholder={t.create.customPlaceholder}

@@ -201,7 +201,7 @@ export default function StoryView() {
         <div className="sv-intro">
           <div className="sv-intro-book">📖</div>
           <p className="sv-intro-text">
-            {lang === 'tr' ? 'Hikaye hazırlanıyor...' : 'Preparing your story...'}
+            {lang === 'tr' ? 'Masal hazırlanıyor...' : 'Preparing your story...'}
           </p>
         </div>
       )}
@@ -259,7 +259,7 @@ export default function StoryView() {
             <div className="sv-finish-banner animate-fadeIn">
               <span className="sv-finish-emoji">🎉</span>
               <div className="sv-finish-text">
-                <strong>{lang === 'tr' ? 'Hikaye bitti!' : 'Story complete!'}</strong>
+                <strong>{lang === 'tr' ? 'Masal bitti!' : 'Story complete!'}</strong>
                 <span>{lang === 'tr' ? 'Harika bir okuma yaptın.' : 'Great reading session!'}</span>
               </div>
               <div className="sv-finish-actions">
@@ -270,12 +270,12 @@ export default function StoryView() {
                 {!alreadySaved && (
                   <button className="sv-finish-btn sv-finish-btn--save"
                     onClick={handleSave} disabled={saving}>
-                    {saving ? '⏳' : '💾'} {lang === 'tr' ? 'Hikayelerime Ekle' : 'Add to My Stories'}
+                    {saving ? '⏳' : '💾'} {lang === 'tr' ? 'Masallarıma Ekle' : 'Add to My Stories'}
                   </button>
                 )}
                 {alreadySaved && (
                   <span className="sv-finish-saved">
-                    ✅ {lang === 'tr' ? 'Hikayelerime eklendi!' : 'Added to My Stories!'}
+                    ✅ {lang === 'tr' ? 'Masallarıma eklendi!' : 'Added to My Stories!'}
                   </span>
                 )}
               </div>

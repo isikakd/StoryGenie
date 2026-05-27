@@ -41,7 +41,7 @@ function StatCard({ label, sublabel, value, color, index }) {
 }
 
 // En çok kullanılan karakter/mekan kartı
-function TopItem({ imagePath, name, count, index }) {
+function TopItem({ imagePath, name, count, index, storyCount }) {
   const file = imagePath?.split('/').pop() || '';
   const isChar = imagePath?.includes('characters');
   const isLoc  = imagePath?.includes('locations');
@@ -58,7 +58,7 @@ function TopItem({ imagePath, name, count, index }) {
       </div>
       <div className="top-item-info">
         <span className="top-item-name">{name}</span>
-        <span className="top-item-count">{count} hikaye</span>
+        <span className="top-item-count">{count} {storyCount}</span>
       </div>
       <div className="top-item-bar-wrap">
         <div className="top-item-bar" style={{ width: `${Math.min(count * 20, 100)}%` }} />
@@ -100,12 +100,12 @@ export default function Dashboard() {
   const { summary, charts } = data || {};
 
   const langData = (charts?.languageDistribution || []).map(d => ({
-    name: d._id === 'tr' ? 'Türkçe' : 'English',
+    name: d._id === 'tr' ? t.lang.tr : t.lang.en,
     value: d.count,
   }));
 
   const durationData = (charts?.durationDistribution || []).map(d => ({
-    name: d._id === 'short' ? 'Kısa' : d._id === 'medium' ? 'Orta' : 'Uzun',
+    name: d._id === 'short' ? t.dashboard.durShort : d._id === 'medium' ? t.dashboard.durMedium : t.dashboard.durLong,
     value: d.count,
   }));
 
@@ -121,21 +121,21 @@ export default function Dashboard() {
 
         {/* Header */}
         <div className="dash-header animate-fadeIn">
-          <h1 className="dash-title">{t.dashboard?.title || 'İstatistikler'}</h1>
-          <p className="dash-subtitle">Merhaba {user?.username}! {t.dashboard?.subtitle || 'İstatistiklerin aşağıda'}</p>
+          <h1 className="dash-title">{t.dashboard?.title}</h1>
+          <p className="dash-subtitle">{t.dashboard?.greeting} {user?.username}! {t.dashboard?.subtitle}</p>
         </div>
 
         {/* Stat kartları — sadece 2 */}
         <div className="stat-cards">
           <StatCard index={0}
-            label="Toplam Hikaye"
-            sublabel="Oluşturulan tüm hikayelerin sayısı"
+            label={t.dashboard.statTotalLabel}
+            sublabel={t.dashboard.statTotalSub}
             value={summary?.totalStories ?? 0}
             color="#7c3aed"
           />
           <StatCard index={1}
-            label="Paylaşılan Hikaye"
-            sublabel="Topluluk ile paylaşılan hikayeler"
+            label={t.dashboard.statSharedLabel}
+            sublabel={t.dashboard.statSharedSub}
             value={summary?.publicStories ?? 0}
             color="#06b6d4"
           />
@@ -147,8 +147,8 @@ export default function Dashboard() {
           {/* Son 7 Gün Bar */}
           <div className="chart-card animate-fadeIn" style={{ gridColumn: 'span 2' }}>
             <div className="chart-card-header">
-              <h3 className="chart-title">📅 Son 7 Günlük Hikayeler</h3>
-              <p className="chart-desc">Son 7 günde oluşturulan hikaye sayısı</p>
+              <h3 className="chart-title">{t.dashboard.chart7DaysTitle}</h3>
+              <p className="chart-desc">{t.dashboard.chart7DaysDesc}</p>
             </div>
             {barData.length > 0 ? (
               <ResponsiveContainer width="100%" height={220}>
@@ -156,17 +156,17 @@ export default function Dashboard() {
                   <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'var(--clr-ink-muted)' }} />
                   <YAxis tick={{ fontSize: 11, fill: 'var(--clr-ink-muted)' }} allowDecimals={false} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="count" name="Hikaye" radius={[6,6,0,0]} fill="#7c3aed" maxBarSize={36} />
+                  <Bar dataKey="count" name={t.dashboard.barName} radius={[6,6,0,0]} fill="#7c3aed" maxBarSize={36} />
                 </BarChart>
               </ResponsiveContainer>
-            ) : <div className="chart-empty">Henüz veri yok</div>}
+            ) : <div className="chart-empty">{t.dashboard.noData}</div>}
           </div>
 
           {/* Dil Dağılımı */}
           <div className="chart-card animate-fadeIn">
             <div className="chart-card-header">
-              <h3 className="chart-title">🌍 Dil Tercih Dağılımı</h3>
-              <p className="chart-desc">Hikayelerin yazıldığı diller</p>
+              <h3 className="chart-title">{t.dashboard.langChartTitle}</h3>
+              <p className="chart-desc">{t.dashboard.langChartDesc}</p>
             </div>
             {langData.length > 0 ? (
               <ResponsiveContainer width="100%" height={220}>
@@ -181,14 +181,14 @@ export default function Dashboard() {
                   <Legend formatter={v => <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{v}</span>} />
                 </PieChart>
               </ResponsiveContainer>
-            ) : <div className="chart-empty">Henüz veri yok</div>}
+            ) : <div className="chart-empty">{t.dashboard.noData}</div>}
           </div>
 
           {/* Süre Dağılımı */}
           <div className="chart-card animate-fadeIn">
             <div className="chart-card-header">
-              <h3 className="chart-title">⏳ Süre Dağılımı</h3>
-              <p className="chart-desc">Hikayelerin okuma süresine göre dağılımı</p>
+              <h3 className="chart-title">{t.dashboard.durChartTitle}</h3>
+              <p className="chart-desc">{t.dashboard.durChartDesc}</p>
             </div>
             {durationData.length > 0 ? (
               <ResponsiveContainer width="100%" height={220}>
@@ -203,14 +203,14 @@ export default function Dashboard() {
                   <Legend formatter={v => <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{v}</span>} />
                 </PieChart>
               </ResponsiveContainer>
-            ) : <div className="chart-empty">Henüz veri yok</div>}
+            ) : <div className="chart-empty">{t.dashboard.noData}</div>}
           </div>
 
           {/* En Çok Seçilen Karakterler */}
           <div className="chart-card animate-fadeIn">
             <div className="chart-card-header">
-              <h3 className="chart-title">👧👦 En Çok Seçilen Karakterler</h3>
-              <p className="chart-desc">En sık hikayeye dahil edilen çocuk karakterler</p>
+              <h3 className="chart-title">{t.dashboard.humansTitle}</h3>
+              <p className="chart-desc">{t.dashboard.humansDesc}</p>
             </div>
             {topHumans.length > 0 ? (
               <div className="top-list">
@@ -219,17 +219,18 @@ export default function Dashboard() {
                     imagePath={item._id.imagePath}
                     name={item._id.name}
                     count={item.count}
+                    storyCount={t.dashboard.storyCount}
                   />
                 ))}
               </div>
-            ) : <div className="chart-empty">Henüz veri yok</div>}
+            ) : <div className="chart-empty">{t.dashboard.noData}</div>}
           </div>
 
           {/* En Çok Seçilen Hayvanlar */}
           <div className="chart-card animate-fadeIn">
             <div className="chart-card-header">
-              <h3 className="chart-title">🐾 En Çok Seçilen Hayvanlar</h3>
-              <p className="chart-desc">En sık hikayeye dahil edilen hayvan karakterler</p>
+              <h3 className="chart-title">{t.dashboard.animalsTitle}</h3>
+              <p className="chart-desc">{t.dashboard.animalsDesc}</p>
             </div>
             {topAnimals.length > 0 ? (
               <div className="top-list">
@@ -238,17 +239,18 @@ export default function Dashboard() {
                     imagePath={item._id.imagePath}
                     name={item._id.name}
                     count={item.count}
+                    storyCount={t.dashboard.storyCount}
                   />
                 ))}
               </div>
-            ) : <div className="chart-empty">Henüz veri yok</div>}
+            ) : <div className="chart-empty">{t.dashboard.noData}</div>}
           </div>
 
           {/* En Çok Seçilen Mekanlar */}
           <div className="chart-card animate-fadeIn" style={{ gridColumn: 'span 2' }}>
             <div className="chart-card-header">
-              <h3 className="chart-title">🗺️ En Çok Seçilen Mekanlar</h3>
-              <p className="chart-desc">Hikayelerde en sık kullanılan mekanlar</p>
+              <h3 className="chart-title">{t.dashboard.locTitle}</h3>
+              <p className="chart-desc">{t.dashboard.locDesc}</p>
             </div>
             {topLocations.length > 0 ? (
               <div className="top-locations-grid">
@@ -262,13 +264,13 @@ export default function Dashboard() {
                       )}
                       <div className="top-loc-overlay">
                         <span className="top-loc-name">{item._id.name}</span>
-                        <span className="top-loc-count">{item.count} hikaye</span>
+                        <span className="top-loc-count">{item.count} {t.dashboard.storyCount}</span>
                       </div>
                     </div>
                   );
                 })}
               </div>
-            ) : <div className="chart-empty">Henüz veri yok</div>}
+            ) : <div className="chart-empty">{t.dashboard.noData}</div>}
           </div>
 
         </div>

@@ -57,7 +57,7 @@ export default function Favorites() {
         <div className="fav-header animate-fadeIn">
           <h1 className="fav-title">🔖 {lang === 'tr' ? 'Favorilerim' : 'My Favorites'}</h1>
           <p className="fav-subtitle">
-            {lang === 'tr' ? 'Kaydettiğin hikayeler burada.' : 'Stories you saved appear here.'}
+            {lang === 'tr' ? 'Kaydettiğin masallar burada.' : 'Stories you saved appear here.'}
           </p>
         </div>
 
@@ -67,9 +67,9 @@ export default function Favorites() {
           <div className="fav-empty animate-fadeIn">
             <div className="fav-empty-icon">🔖</div>
             <h3>{lang === 'tr' ? 'Henüz favori yok' : 'No favorites yet'}</h3>
-            <p>{lang === 'tr' ? 'Paylaşılan hikayelerden beğendiklerini kaydet!' : 'Save stories you like from Shared Stories!'}</p>
+            <p>{lang === 'tr' ? 'Paylaşılan masallardan beğendiklerini kaydet!' : 'Save stories you like from Shared Stories!'}</p>
             <button className="btn btn-primary" onClick={() => navigate('/explore')}>
-              {lang === 'tr' ? '✨ Hikayelere Gözat' : '✨ Browse Stories'}
+              {lang === 'tr' ? '✨ Masallara Gözat' : '✨ Browse Stories'}
             </button>
           </div>
         )}
