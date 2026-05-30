@@ -1,8 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LangContext';
 import './Auth.css';
+
+function useIsDark() {
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.getAttribute('data-theme') === 'dark'
+  );
+  useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setIsDark(document.documentElement.getAttribute('data-theme') === 'dark')
+    );
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
 
 function validate(identifier, password, t) {
   const errors = {};
@@ -16,6 +30,7 @@ export default function Login() {
   const { login } = useAuth();
   const { t } = useLang();
   const navigate = useNavigate();
+  const isDark = useIsDark();
 
   const [form, setForm] = useState({ identifier: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -51,7 +66,7 @@ export default function Login() {
       <div className="auth-card animate-fadeIn">
         <div className="auth-header">
           <div className="auth-logo-icon">
-            <img src="/assets/landing/logo.png" alt="Masalmatik" />
+            <img src={isDark ? '/assets/landing/logo1.png' : '/assets/landing/logo2.png'} alt="Masalmatik" />
           </div>
           <h1 className="auth-title">{t.auth.loginTitle}</h1>
           <p className="auth-subtitle">{t.auth.loginSubtitle}</p>

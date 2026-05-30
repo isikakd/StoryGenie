@@ -71,9 +71,10 @@
 /* Logo */
 .navbar-logo { display:flex; align-items:center; flex-shrink:0; text-decoration:none; }
 .logo-img {
-  height: 44px; width: 44px;
-  border-radius: 50%;
-  object-fit: cover; object-position: center 20%;
+  height: 50px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
   background: transparent;
   border: none;
   box-shadow: none;

@@ -223,7 +223,7 @@ export default function LandingPage() {
 
             {/* Kolon 1 — Marka */}
             <motion.div className="lp-footer-col lp-footer-brand" variants={fadeUp()}>
-              <img src="/assets/landing/logo.png" alt="Masalmatik" className="lp-footer-logo" />
+              <img src={isDark ? '/assets/landing/logo1.png' : '/assets/landing/logo2.png'} alt="Masalmatik" className="lp-footer-logo" />
               <span className="lp-footer-name">Masalmatik</span>
               <p className="lp-footer-slogan">
                 {lang==='tr' ? 'Küçük hayalciler için sevgiyle yapıldı.' : 'Made with love for little dreamers.'}
