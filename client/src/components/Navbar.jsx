@@ -97,7 +97,7 @@ export default function Navbar() {
           </div>
 
           {user ? (
-            <div className="user-menu">
+            <div className="user-menu" style={{ flexShrink: 0 }}>
               <button className="user-avatar-btn" onClick={() => setDropdownOpen(!dropdownOpen)}>
                 <span className="user-avatar" style={{ background: user.avatarBg || localStorage.getItem('avatarBg') || 'rgb(10,15,60)' }}>
                   {user.avatar?.startsWith('/')
@@ -128,9 +128,17 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="auth-btns">
-              <Link to="/login"    className={`nav-auth-btn${isActive('/login')    ? ' nav-auth-btn--active' : ''}`}>{t.nav.login}</Link>
-              <Link to="/register" className={`nav-auth-btn${isActive('/register') ? ' nav-auth-btn--active' : ''}`}>{t.nav.register}</Link>
+            <div className="auth-btns" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <Link
+                to="/login"
+                className={`nav-auth-btn${isActive('/login') ? ' nav-auth-btn--active' : ''}`}
+                style={{ whiteSpace: 'nowrap', minWidth: '80px', textAlign: 'center' }}
+              >{t.nav.login}</Link>
+              <Link
+                to="/register"
+                className={`nav-auth-btn${isActive('/register') ? ' nav-auth-btn--active' : ''}`}
+                style={{ whiteSpace: 'nowrap', minWidth: '90px', textAlign: 'center' }}
+              >{t.nav.register}</Link>
             </div>
           )}
 
