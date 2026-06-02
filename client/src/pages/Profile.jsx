@@ -6,21 +6,18 @@ import api from '../services/api';
 import './Profile.css';
 
 const AVATARS = [
-  // Açık ten
-  '🧒','👧','👦','🧑','👩','👨',
-  // Orta ten
-  '🧒🏽','👧🏽','👦🏽','🧑🏽','👩🏽','👨🏽',
-  // Koyu ten
-  '🧒🏾','👧🏾','👦🏾','🧑🏾','👩🏾','👨🏾',
-  // Çok koyu ten
-  '🧒🏿','👧🏿','👦🏿','🧑🏿','👩🏿','👨🏿',
-  // Fantastik karakterler (çeşitli tenler)
-  '🧙','🧙🏽','🧙🏾','🧙🏿',
-  '🧚','🧚🏽','🧚🏾','🧚🏿',
-  '🦸','🦸🏽','🦸🏾','🦸🏿',
-  '🧜','🧜🏽','🧜🏾','🧜🏿',
-  // Hayvanlar & semboller
-  '🐱','🦊','🐼','🦁','🐸','🦋','⭐','🌟','🎨','📚',
+  // Çocuklar
+  '👦','👧','👦🏽','👧🏽','👦🏾','👧🏾',
+  // Prenses & Prens
+  '🤴🏽','👸','👸🏾',
+  // Sevimli hayvanlar
+  '🐱','🐶','🐰','🐼','🦊','🐨','🐸','🐯','🦁','🐻‍❄️',
+  // Fantastik
+  '🦄','🐲','🧚','🧜','🦸🏽','🧙',
+  // Doğa & uzay
+  '🌟','🌈','🦋','🚀','🪐',
+  // Eğlence
+  '🎨','📚','🎈','🍭','🏆',
 ];
 
 export default function Profile() {
@@ -229,8 +226,6 @@ export default function Profile() {
                 </div>
               </div>
 
-              {avatarMsg && <p className="prof-msg ok">{avatarMsg}</p>}
-
               {/* Arka plan rengi */}
               <div className="prof-bg-section">
                 <span className="prof-emoji-label" style={{display:'block',marginBottom:'8px'}}>{tr ? 'ARKA PLAN RENGİ' : 'BACKGROUND COLOR'}</span>
@@ -249,6 +244,7 @@ export default function Profile() {
                   <small>{tr ? 'Seçtiğin avatar masal kartlarında görünecek.' : 'Your avatar will appear on story cards.'}</small>
                 </div>
               </div>
+              {avatarMsg && <p className="prof-msg ok" style={{marginTop:'10px'}}>{avatarMsg}</p>}
             </div>
           </div>
 
@@ -283,6 +279,14 @@ export default function Profile() {
                   🔒 {tr ? 'Sifre Degistir' : 'Change Password'}
                 </button>
               </div>
+
+              {/* Üyelik tarihi */}
+              {user?.createdAt && (
+                <p className="prof-member-since">
+                  🗓 {tr ? 'Üyelik tarihi: ' : 'Member since: '}
+                  {new Date(user.createdAt).toLocaleDateString(tr ? 'tr-TR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </p>
+              )}
             </div>
 
           </div>
