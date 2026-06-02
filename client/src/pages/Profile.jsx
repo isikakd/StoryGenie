@@ -5,7 +5,23 @@ import { useLang } from '../context/LangContext';
 import api from '../services/api';
 import './Profile.css';
 
-const AVATARS = ['🧒','👧','👦','🧑','👩','👨','🧙','🧚','🦸','🧜','🐱','🦊','🐼','🦁','🐸','🦋','⭐','🌟','🎨','📚'];
+const AVATARS = [
+  // Açık ten
+  '🧒','👧','👦','🧑','👩','👨',
+  // Orta ten
+  '🧒🏽','👧🏽','👦🏽','🧑🏽','👩🏽','👨🏽',
+  // Koyu ten
+  '🧒🏾','👧🏾','👦🏾','🧑🏾','👩🏾','👨🏾',
+  // Çok koyu ten
+  '🧒🏿','👧🏿','👦🏿','🧑🏿','👩🏿','👨🏿',
+  // Fantastik karakterler (çeşitli tenler)
+  '🧙','🧙🏽','🧙🏾','🧙🏿',
+  '🧚','🧚🏽','🧚🏾','🧚🏿',
+  '🦸','🦸🏽','🦸🏾','🦸🏿',
+  '🧜','🧜🏽','🧜🏾','🧜🏿',
+  // Hayvanlar & semboller
+  '🐱','🦊','🐼','🦁','🐸','🦋','⭐','🌟','🎨','📚',
+];
 
 export default function Profile() {
   const { user, updateUser, logout } = useAuth();
@@ -295,8 +311,6 @@ export default function Profile() {
           <div className="prof-notif-list">
             {[
               { key: 'notifyOnLike',    label: tr ? 'Masallarıma beğeni geldiğinde mail al'   : 'Email when my stories get liked',    desc: tr ? 'Biri masalını beğendiğinde haberdar ol.' : 'Get notified when someone likes your story.' },
-              { key: 'notifyOnComment', label: tr ? 'Masallarıma yorum geldiğinde mail al'    : 'Email when my stories get comments',  desc: tr ? 'Yorum özelliği yakında eklenecek.'      : 'Comment feature coming soon.' },
-              { key: 'notifyOnFollow',  label: tr ? 'Beni takip eden olduğunda mail al'        : 'Email when someone follows me',       desc: tr ? 'Takip özelliği yakında eklenecek.'      : 'Follow feature coming soon.' },
               { key: 'notifyMarketing', label: tr ? 'MasalMatik haberleri ve duyuruları'       : 'MasalMatik news and announcements',   desc: tr ? 'Yeni özellikler ve özel içerikler.'     : 'New features and special content.' },
             ].map(({ key, label, desc }) => (
               <div key={key} className="prof-notif-row">
