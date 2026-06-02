@@ -36,6 +36,15 @@ export default function StoryView() {
   const [readAll, setReadAll]   = useState(false);
   const utteranceRef            = useRef(null);
 
+  const [isMobile, setIsMobile]           = useState(() => window.innerWidth < 768);
+  const [showMobileFinish, setShowMobileFinish] = useState(false);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   const totalPages = pages.length;
   const isFirst    = currentPage === 0;
   const isLast     = currentPage === totalPages - 1;
@@ -226,8 +235,78 @@ export default function StoryView() {
         </div>
       )}
 
-      {/* ── OKUMA SAYFASI ── */}
-      {phase === 'reading' && (
+      {/* ── MOBİL OKUMA SAYFASI ── */}
+      {phase === 'reading' && isMobile && (
+        <div className="sv-mobile-reader animate-fadeIn">
+
+          {/* Sesli okuma bar */}
+          <div className="sv-mobile-tts">
+            <button className={`sv-mobile-tts-btn ${speaking && !paused ? 'active' : ''}`} onClick={handleReadPage}>
+              {speaking && !paused ? '⏸' : paused ? '▶' : '▶'}
+              <span>{lang === 'tr' ? (paused ? 'Devam' : 'Sayfayı Oku') : (paused ? 'Resume' : 'Read Page')}</span>
+            </button>
+            <button className={`sv-mobile-tts-btn ${readAll ? 'active' : ''}`} onClick={handleReadAll}>
+              {readAll ? '⏹' : '📖'}
+              <span>{lang === 'tr' ? (readAll ? 'Durdur' : 'Tümünü Oku') : (readAll ? 'Stop' : 'Read All')}</span>
+            </button>
+          </div>
+
+          {/* Kahraman görsel: mekan + karakterler */}
+          <div className="sv-mobile-hero">
+            {location && (
+              <div className="sv-mobile-hero-bg"
+                style={{ backgroundImage: `url('/assets/locations/${location.file}')` }} />
+            )}
+            <div className="sv-mobile-hero-overlay" />
+            <h1 className="sv-mobile-hero-title">{story.title}</h1>
+            <div className="sv-mobile-hero-chars">
+              {characters.map((c, i) => (
+                <img key={c.id || i} src={`/assets/characters/${c.file}`} alt={c.name?.tr || ''}
+                  onError={e => { e.target.style.display = 'none'; }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Tüm masal metni */}
+          <div className="sv-mobile-story">
+            {pages.map((page, i) => (
+              <p key={i} className={readAll && i === currentPage ? 'sv-mobile-page--reading' : ''}>
+                {cleanMd(page.content)}
+              </p>
+            ))}
+          </div>
+
+          {/* Okumayı Bitir */}
+          <div className="sv-mobile-finish-area">
+            {!showMobileFinish ? (
+              <button className="sv-mobile-finish-btn"
+                onClick={() => { stopSpeech(); if (!alreadySaved) handleSave(); setShowMobileFinish(true); }}>
+                {lang === 'tr' ? 'Okumayı Bitir' : 'Finish Reading'}
+              </button>
+            ) : (
+              <div className="sv-mobile-finish-card animate-fadeIn">
+                <span>🎉</span>
+                <strong>{lang === 'tr' ? 'Masal bitti!' : 'Story complete!'}</strong>
+                <p>{lang === 'tr'
+                  ? (alreadySaved ? 'Masallarıma kaydedildi ✅' : saving ? 'Kaydediliyor...' : 'Kaydedildi ✅')
+                  : (alreadySaved ? 'Added to My Stories ✅' : saving ? 'Saving...' : 'Saved ✅')}</p>
+                <div className="sv-mobile-finish-btns">
+                  <button onClick={() => { setShowMobileFinish(false); }}>
+                    🔄 {lang === 'tr' ? 'Tekrar Oku' : 'Read Again'}
+                  </button>
+                  <button onClick={() => { stopSpeech(); navigate('/'); }}>
+                    🏠 {lang === 'tr' ? 'Ana Sayfa' : 'Home'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+      )}
+
+      {/* ── MASAÜSTÜ OKUMA SAYFASI ── */}
+      {phase === 'reading' && !isMobile && (
         <div className="sv-reading animate-fadeIn">
 
           {/* ── ÜST BAR ── */}

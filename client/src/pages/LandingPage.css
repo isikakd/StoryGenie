@@ -696,6 +696,22 @@ a.lp-contact-info-val:hover { text-decoration: underline; color: var(--plum, #7c
   .lp-contact-form { padding:24px 20px; }
 }
 @media (max-width:480px) {
-  .lp-hero-title { font-size:2rem; }
+  .lp-hero { min-height: 520px; }
+  .lp-hero-content { padding:80px 16px 48px; }
+  .lp-hero-title { font-size:1.9rem; letter-spacing:-0.5px; }
+  .lp-hero-sub   { font-size:0.92rem; }
+  .lp-btn-primary, .lp-btn-ghost { padding:12px 22px; font-size:0.9rem; }
   .lp-btn-cta    { width:100%; justify-content:center; }
+  .lp-features-section, .lp-how-section, .lp-showcase { padding:60px 0; }
+  .lp-sec-head   { margin-bottom:32px; }
+  .lp-cta-text h2 { font-size:1.7rem; }
+  .lp-footer-col  { padding:0 10px; }
+  .lp-contact-section { padding:60px 0 48px; }
+}
+/* Yatay (landscape) kısa ekran — 932×430 tablet gibi */
+@media (max-height:520px) and (orientation:landscape) {
+  .lp-hero { height:auto; min-height:100vh; }
+  .lp-hero-content { padding:80px 48px 40px; }
+  .lp-hero-title { font-size:2rem; }
+  .lp-hero::after { height:25%; }
 }

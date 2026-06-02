@@ -237,3 +237,12 @@
   .settings-title { font-size: 1.6rem; }
   .notif-row { padding: 12px 14px; }
 }
+@media (max-width: 480px) {
+  .settings-page { padding: 28px 0; }
+  .settings-title { font-size: 1.4rem; margin-bottom: 20px; }
+  .settings-card { padding: 20px 16px; }
+  .settings-tabs { width: 100%; }
+  .settings-tab { padding: 9px 18px; font-size: 0.82rem; flex: 1; text-align: center; }
+  .settings-lang-btns { flex-wrap: wrap; }
+  .settings-lang-btn { flex: 1; text-align: center; }
+}

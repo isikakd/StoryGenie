@@ -278,7 +278,6 @@ export default function MyStories() {
       <div className="container">
 
         <div className="ms-header animate-fadeIn">
-          <h1 className="ms-title">{t.myStories.title}</h1>
           <p className="ms-subtitle">{t.myStories.subtitle}</p>
         </div>
 

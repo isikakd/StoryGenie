@@ -33,7 +33,7 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
     const days = Math.floor((Date.now() - new Date(story.createdAt).getTime()) / 86400000);
     if (days <= 3)                           return { label: lang === 'tr' ? '⭐ Yeni' : '⭐ New', cls: 'badge--new' };
     if (story.viewCount > 200)               return { label: lang === 'tr' ? '📖 Çok Okunan' : '📖 Popular', cls: 'badge--read' };
-    if (story.communityAverageRating >= 4)   return { label: lang === 'tr' ? '🏆 Editör Seçkisi' : '🏆 Editor Pick', cls: 'badge--editor' };
+    if (story.communityAverageRating >= 4)   return null;
     if (likeCount > 30)                      return { label: lang === 'tr' ? '🔥 Popüler' : '🔥 Trending', cls: 'badge--popular' };
     return null;
   };
@@ -285,7 +285,6 @@ export default function Explore() {
       <div className="container">
 
         <div className="exp-header animate-fadeIn">
-          <h1 className="exp-title">{t.explore?.title || 'Paylaşılan Masallar'}</h1>
           <p className="exp-subtitle">{t.explore?.subtitle || 'Topluluktan masallar'}</p>
         </div>
 
@@ -293,18 +292,18 @@ export default function Explore() {
         <div className="exp-toolbar animate-fadeIn">
           <div className="exp-toolbar-left">
             {/* Tümü */}
-            <button className={`exp-tab ${sortBy === 'all' ? 'active' : ''}`}
-              onClick={() => { setSortBy('all'); setPage(1); }}>
+            <button className={`exp-tab ${sortBy === 'all' && !showFavorites ? 'active' : ''}`}
+              onClick={() => { setSortBy('all'); setPage(1); setShowFavorites(false); }}>
               {lang === 'tr' ? 'Tümü' : 'All'}
               <span className="exp-tab-count">{stories.length}</span>
             </button>
 
-            {/* Favorilerim filtre butonu — sadece giriş yapmış kullanıcılara */}
+            {/* Favoriler filtre butonu — sadece giriş yapmış kullanıcılara */}
             {user && (
               <button
-                className={`exp-tab${showFavorites ? ' active' : ''}`}
+                className={`exp-tab exp-tab--fav${showFavorites ? ' active' : ''}`}
                 onClick={handleToggleFavorites}>
-                ⭐ {lang === 'tr' ? 'Favorilerim' : 'My Favorites'}
+                ⭐ {lang === 'tr' ? 'Favoriler' : 'Favorites'}
                 {favoriteIds.size > 0 && <span className="exp-tab-count">{favoriteIds.size}</span>}
               </button>
             )}

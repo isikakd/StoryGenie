@@ -152,25 +152,51 @@ export default function Navbar() {
         <div className="mobile-menu">
           {user ? (
             <>
-              <Link to="/"           onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{lang === 'tr' ? 'Masal Oluştur' : 'Create Story'}</Link>
-              <Link to="/explore"    onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{lang === 'tr' ? 'Paylaşılan Masallar' : 'Shared Stories'}</Link>
-              <Link to="/my-stories" onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>{t.nav.myStories}</Link>
-
-              <Link to="/profile"    onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>👤 {lang === 'tr' ? 'Profilim' : 'My Profile'}</Link>
-              <Link to="/dashboard"  onClick={() => { setMenuOpen(false); setDropdownOpen(false); }}>📊 {lang === 'tr' ? 'İstatistikler' : 'Statistics'}</Link>
+              <Link to="/"           onClick={() => { setMenuOpen(false); setDropdownOpen(false); }} className="mobile-menu-link">{lang === 'tr' ? 'Masal Oluştur' : 'Create Story'}</Link>
+              <Link to="/explore"    onClick={() => { setMenuOpen(false); setDropdownOpen(false); }} className="mobile-menu-link">{lang === 'tr' ? 'Paylaşılan Masallar' : 'Shared Stories'}</Link>
+              <Link to="/my-stories" onClick={() => { setMenuOpen(false); setDropdownOpen(false); }} className="mobile-menu-link">{t.nav.myStories}</Link>
               <hr className="mobile-divider" />
-              <button onClick={handleLogout} className="mobile-logout">{t.nav.logout}</button>
+              <div className="mobile-controls">
+                <div className="mobile-controls-row">
+                  <span className="mobile-controls-label">{lang === 'tr' ? 'Tema' : 'Theme'}</span>
+                  <div className="theme-switcher">
+                    <button className={`theme-btn ${dark ? 'active' : ''}`} onClick={() => setDark(true)}>🌙</button>
+                    <button className={`theme-btn ${!dark ? 'active' : ''}`} onClick={() => setDark(false)}>☀️</button>
+                  </div>
+                </div>
+                <div className="mobile-controls-row">
+                  <span className="mobile-controls-label">{lang === 'tr' ? 'Dil' : 'Language'}</span>
+                  <div className="lang-switcher">
+                    <button className={`lang-btn ${lang === 'tr' ? 'active' : ''}`} onClick={() => switchLang('tr')}>TR</button>
+                    <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => switchLang('en')}>EN</button>
+                  </div>
+                </div>
+              </div>
             </>
           ) : (
             <>
-              <button onClick={() => scrollToSection('anasayfa')}      className="nav-link">{lang === 'tr' ? 'Anasayfa' : 'Home'}</button>
-              <button onClick={() => scrollToSection('ozellikler')}    className="nav-link">{lang === 'tr' ? 'Özellikler' : 'Features'}</button>
-              <button onClick={() => scrollToSection('nasil-calisir')} className="nav-link">{lang === 'tr' ? 'Nasıl Çalışır?' : 'How It Works'}</button>
-              <button onClick={() => scrollToSection('ornek')}         className="nav-link">{lang === 'tr' ? 'Örnek Masal' : 'Example'}</button>
-              <button onClick={() => scrollToSection('iletisim')} className="nav-link">{lang === 'tr' ? 'İletişim' : 'Contact'}</button>
+              <button onClick={() => scrollToSection('anasayfa')}      className="mobile-menu-link">{lang === 'tr' ? 'Anasayfa' : 'Home'}</button>
+              <button onClick={() => scrollToSection('ozellikler')}    className="mobile-menu-link">{lang === 'tr' ? 'Özellikler' : 'Features'}</button>
+              <button onClick={() => scrollToSection('nasil-calisir')} className="mobile-menu-link">{lang === 'tr' ? 'Nasıl Çalışır?' : 'How It Works'}</button>
+              <button onClick={() => scrollToSection('ornek')}         className="mobile-menu-link">{lang === 'tr' ? 'Örnek Masal' : 'Example'}</button>
+              <button onClick={() => scrollToSection('iletisim')}      className="mobile-menu-link">{lang === 'tr' ? 'İletişim' : 'Contact'}</button>
               <hr className="mobile-divider" />
-              <Link to="/login"    onClick={() => setMenuOpen(false)}>{t.nav.login}</Link>
-              <Link to="/register" onClick={() => setMenuOpen(false)}>{t.nav.register}</Link>
+              <div className="mobile-controls">
+                <div className="mobile-controls-row">
+                  <span className="mobile-controls-label">{lang === 'tr' ? 'Tema' : 'Theme'}</span>
+                  <div className="theme-switcher">
+                    <button className={`theme-btn ${dark ? 'active' : ''}`} onClick={() => setDark(true)}>🌙</button>
+                    <button className={`theme-btn ${!dark ? 'active' : ''}`} onClick={() => setDark(false)}>☀️</button>
+                  </div>
+                </div>
+                <div className="mobile-controls-row">
+                  <span className="mobile-controls-label">{lang === 'tr' ? 'Dil' : 'Language'}</span>
+                  <div className="lang-switcher">
+                    <button className={`lang-btn ${lang === 'tr' ? 'active' : ''}`} onClick={() => switchLang('tr')}>TR</button>
+                    <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => switchLang('en')}>EN</button>
+                  </div>
+                </div>
+              </div>
             </>
           )}
         </div>

@@ -95,6 +95,17 @@ export default function BookOpeningTransition({ visible, storyReady, onComplete,
       aria-label={uiLang === 'tr' ? 'Masal oluşturuluyor' : 'Generating story'}
       aria-live="polite"
     >
+      {/* Mobil yükleme ekranı */}
+      <div className="bot-mobile-overlay">
+        <div className="bot-mobile-dots">
+          <span /><span /><span />
+        </div>
+        <p className="bot-mobile-text">
+          {uiLang === 'tr' ? 'Masalınız oluşturuluyor...' : 'Creating your story...'}
+        </p>
+        <p className="bot-mobile-sub">✨ 🌙 💫</p>
+      </div>
+
       {/* Kitap + parçacıklar + durum */}
       <AnimatePresence>
         {showBook && (

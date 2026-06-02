@@ -135,6 +135,11 @@ export default function CreateStory() {
     <div className="create-page" data-step={step}>
       <div className="create-container">
 
+        {/* ── SAYFA ALTYAZISI ── */}
+        {!generating && step === 0 && (
+          <p className="create-page-subtitle">{t.create.subtitle}</p>
+        )}
+
         {/* ── PROGRESS BAR / GEN STATUS ── */}
         {generating ? (
           <div className="gen-status-row animate-fadeIn">
@@ -392,7 +397,7 @@ export default function CreateStory() {
       {step === 3 && !generating && (
         <div className="step3-scene" ref={step3SceneRef}>
           <div className="step3-bg"
-            style={{ backgroundImage: `url('/assets/create/settings-bg.png'), url('/assets/create/${isDark ? 'darkf' : 'dayf'}.png')` }}
+            style={{ backgroundImage: `url('/assets/create/${isDark ? 'darkf' : 'dayf'}.png')` }}
           />
           <div className="create-container">
             <div className="step3-layout">
@@ -421,10 +426,6 @@ export default function CreateStory() {
 
                 {validError && <div className="valid-error"><span>⚠️</span> {validError}</div>}
                 {genError   && <div className="valid-error"><span>❌</span> {genError}</div>}
-
-                <button className="wizard-btn wizard-btn--back step3-back" onClick={goBack}>
-                  ← {lang === 'tr' ? 'Geri' : 'Back'}
-                </button>
               </div>
 
 
@@ -433,11 +434,16 @@ export default function CreateStory() {
         </div>
       )}
 
-      {/* Sabit buton — illüstrasyon alanı göründüğünde çıkar, tepedeyken gizlidir */}
+      {/* Sabit butonlar — sahne görününce çıkar, tepedeyken gizlidir */}
       {step === 3 && !generating && sceneVisible && ReactDOM.createPortal(
-        <button className="generate-btn" onClick={handleGenerate}>
-          {t.create.generateBtn}
-        </button>,
+        <>
+          <button className="wizard-btn wizard-btn--back step3-back" onClick={goBack}>
+            ← {lang === 'tr' ? 'Geri' : 'Back'}
+          </button>
+          <button className="generate-btn" onClick={handleGenerate}>
+            {t.create.generateBtn}
+          </button>
+        </>,
         document.body
       )}
 

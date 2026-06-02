@@ -22,7 +22,6 @@ export default function SimpleFooter() {
       <div className="sf-inner container">
         <div className="sf-brand">
           <img src={isDark ? '/assets/landing/logo1.png' : '/assets/landing/logo2.png'} alt="Masalmatik" className="sf-logo" />
-          <span className="sf-name">Masalmatik</span>
         </div>
 
         <p className="sf-slogan">

@@ -116,10 +116,16 @@ border: 2px solid rgba(255, 255, 255, 0.4);
   filter: drop-shadow(0 10px 20px rgba(155,89,182,0.4));
 }
 
-/* ── Hayvan görselleri — insan karakterlerle aynı boyut ── */
+/* ── Hayvan kartları — insan karakterlerle aynı yükseklik ── */
+.char-card--animal .char-visual {
+  height: 240px;
+  align-items: flex-end;
+}
+
 .char-card--animal .char-visual img {
   transform-origin: bottom center;
   mix-blend-mode: lighten;
+  object-position: center bottom;
 }
 
 .char-card--animal:hover:not(.disabled) .char-visual img {
@@ -199,6 +205,10 @@ border: 2px solid rgba(255, 255, 255, 0.4);
   animation: ringPulse 2s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .char-card--animal .char-visual { height: 200px; }
 }
 
 @keyframes checkPop {

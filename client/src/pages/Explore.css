@@ -8,8 +8,16 @@
 [data-theme="light"] .explore-page { background: transparent; }
 
 .exp-header { text-align: center; margin-bottom: 32px; }
-.exp-title  { font-family: var(--font-display); font-size: 2.4rem; font-weight: 900; color: var(--ink); margin: 0; }
-.exp-subtitle { margin-top: 8px; color: var(--ink-soft); font-weight: 600; }
+.exp-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(200, 185, 255, 0.9);
+  margin: 0 0 8px;
+}
+[data-theme="light"] .exp-subtitle { color: rgba(80, 40, 120, 0.45); }
 
 /* ── Toolbar: tablar + paylaş ── */
 .exp-toolbar {
@@ -51,21 +59,27 @@
   white-space: nowrap;
 }
 .exp-tab:hover {
-  border-color: rgb(10, 15, 60);
-  color: rgb(10, 15, 60);
-  background: color-mix(in srgb, rgb(10, 15, 60) 6%, transparent);
+  border-color: rgba(200,170,255,0.5);
+  color: rgba(220,200,255,0.95);
+  background: rgba(155,89,182,0.15);
 }
 .exp-tab.active {
-  background: rgb(10, 15, 60);
-  border-color: rgb(10, 15, 60);
+  background: linear-gradient(135deg, rgb(117,70,104), rgb(80,38,120));
+  border-color: transparent;
   color: #fff;
 }
 [data-theme="light"] .exp-tab {
   border-color: rgba(117,70,104,0.2);
   color: #555;
 }
+[data-theme="light"] .exp-tab:hover {
+  border-color: rgba(117,70,104,0.45);
+  color: rgb(60,20,100);
+  background: rgba(117,70,104,0.08);
+}
 [data-theme="light"] .exp-tab.active {
-  background: rgb(10, 15, 60);
+  background: rgb(10,15,60);
+  border-color: rgb(10,15,60);
   color: #fff;
 }
 
@@ -91,6 +105,14 @@
 }
 @media (max-width: 1100px) { .exp-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 680px)  { .exp-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .explore-page { padding: 24px 0 60px; }
+  .exp-toolbar { gap: 6px; }
+  .exp-tab { padding: 8px 12px; font-size: 0.82rem; }
+  .exp-share-btn { padding: 9px 14px; font-size: 0.82rem; }
+  .exp-filter-panel { gap: 16px; padding: 12px 14px; }
+  .ec-cover { height: 170px; }
+}
 
 /* ══════════════════════════════
    Hikaye Kartı
@@ -429,14 +451,19 @@
   font-weight: 700; font-size: 0.88rem;
   cursor: pointer; transition: all 0.2s;
 }
-.exp-filter-toggle:hover,
+.exp-filter-toggle:hover {
+  background: rgba(155,89,182,0.18);
+  border-color: rgba(200,170,255,0.45);
+  color: rgba(230,210,255,0.95);
+}
 .exp-filter-toggle.active {
-  background: rgb(10,15,60);
-  border-color: rgb(10,15,60);
+  background: linear-gradient(135deg, rgb(117,70,104), rgb(80,38,120));
+  border-color: transparent;
   color: #fff;
 }
 [data-theme="light"] .exp-filter-toggle { border-color: rgba(117,70,104,0.2); color: rgba(60,40,90,0.65); }
-[data-theme="light"] .exp-filter-toggle.active { background: rgb(10,15,60); color: #fff; }
+[data-theme="light"] .exp-filter-toggle:hover { background: rgba(117,70,104,0.1); border-color: rgba(117,70,104,0.35); color: rgb(60,20,100); }
+[data-theme="light"] .exp-filter-toggle.active { background: rgb(10,15,60); border-color: rgb(10,15,60); color: #fff; }
 
 .exp-filter-panel {
   display: flex; gap: 24px; flex-wrap: wrap;

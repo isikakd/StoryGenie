@@ -7,8 +7,16 @@
 }
 
 .ms-header  { text-align: center; margin-bottom: 44px; }
-.ms-title   { font-family: var(--font-display); font-size: 2.6rem; font-weight: 900; color: var(--ink); }
-.ms-subtitle{ margin-top: 8px; color: var(--ink-soft); font-weight: 600; }
+.ms-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(200, 185, 255, 0.9);
+  margin: 0 0 8px;
+}
+[data-theme="light"] .ms-subtitle { color: rgba(80, 40, 120, 0.45); }
 .ms-loading { display: flex; justify-content: center; padding: 80px; }
 .ms-error   { text-align: center; color: var(--coral); padding: 40px; font-weight: 700; }
 
@@ -30,6 +38,15 @@
 }
 @media (max-width: 680px) {
   .ms-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .my-stories-page { padding: 24px 0 60px; }
+  .ms-header { margin-bottom: 28px; }
+  .ms-toolbar { gap: 8px; }
+  .ms-tab { padding: 8px 14px; font-size: 0.82rem; }
+  .sc-visual { height: 170px; }
+  .sc-actions { flex-wrap: wrap; }
+  .sc-btn { font-size: 0.78rem; }
 }
 
 /* ══════════════════════════════
@@ -564,17 +581,18 @@
   transition: all 0.2s;
 }
 .ms-tab:hover {
-  border-color: rgb(10,15,60);
-  color: rgb(10,15,60);
-  background: rgba(10,15,60,0.06);
+  border-color: rgba(200,170,255,0.5);
+  color: rgba(220,200,255,0.95);
+  background: rgba(155,89,182,0.15);
 }
 .ms-tab.active {
-  background: rgb(10,15,60);
-  border-color: rgb(10,15,60);
+  background: linear-gradient(135deg, rgb(117,70,104), rgb(80,38,120));
+  border-color: transparent;
   color: #fff;
 }
 [data-theme="light"] .ms-tab { border-color: rgba(117,70,104,0.2); color: #555; }
-[data-theme="light"] .ms-tab.active { background: rgb(10,15,60); color: #fff; }
+[data-theme="light"] .ms-tab:hover { border-color: rgba(117,70,104,0.45); color: rgb(60,20,100); background: rgba(117,70,104,0.08); }
+[data-theme="light"] .ms-tab.active { background: rgb(10,15,60); border-color: rgb(10,15,60); color: #fff; }
 
 .ms-tab-count {
   background: rgba(255,255,255,0.2);

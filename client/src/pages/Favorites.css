@@ -18,3 +18,9 @@
 .fav-empty-icon { font-size: 4.5rem; animation: float 3s ease-in-out infinite; }
 .fav-empty h3   { font-size: 1.3rem; color: var(--ink-mid); font-family: var(--font-display); }
 .fav-empty p    { color: var(--ink-soft); }
+
+@media (max-width: 480px) {
+  .fav-page { padding: 24px 0 60px; }
+  .fav-title { font-size: 1.8rem; }
+  .fav-header { margin-bottom: 20px; }
+}

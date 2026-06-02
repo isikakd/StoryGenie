@@ -110,6 +110,14 @@
   .charts-grid { grid-template-columns: 1fr; }
   .chart-card[style*="span 2"] { grid-column: span 1 !important; }
 }
+@media (max-width: 480px) {
+  .dashboard-page { padding: 20px 0 48px; }
+  .dash-title { font-size: 1.6rem; }
+  .stat-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-value { font-size: 1.7rem; }
+  .stat-card { padding: 16px 14px 16px 22px; }
+  .top-locations-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
 /* ── Chart Kartı ── */
 .chart-card {

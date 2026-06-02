@@ -208,3 +208,10 @@ a.cp-info-val:hover {
   .cp-title { font-size: 1.5rem; }
   .cp-container { padding: 32px 16px 48px; }
 }
+@media (max-width: 480px) {
+  .cp-page { padding-top: 64px; }
+  .cp-container { padding: 24px 14px 40px; }
+  .cp-title { font-size: 1.3rem; }
+  .cp-header { margin-bottom: 28px; padding-bottom: 18px; }
+  .cp-form { padding: 20px 14px; gap: 14px; }
+}

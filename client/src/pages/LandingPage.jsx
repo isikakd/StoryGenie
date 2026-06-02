@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useLang } from '../context/LangContext';
@@ -44,10 +44,10 @@ export default function LandingPage() {
   const progressWidth = useTransform(scrollYProgress, [0,1], ['0%','100%']);
 
   // Tema toggle'landığında re-render et
-  const [isDark, setIsDark] = React.useState(
+  const [isDark, setIsDark] = useState(
     () => document.documentElement.getAttribute('data-theme') === 'dark'
   );
-  React.useEffect(() => {
+  useEffect(() => {
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
     });
@@ -67,11 +67,19 @@ export default function LandingPage() {
 
       {/* ═══ HERO ═══ */}
       <section className="lp-hero" id="anasayfa">
-        <img 
+        <picture>
+          {/* Mobil + tablet dik görünüm */}
+          <source
+            media="(max-width: 1024px) and (orientation: portrait)"
+            srcSet={isDark ? "/assets/landing/dark1.png" : "/assets/landing/light1.png"}
+          />
+          {/* Masaüstü ve yatay görünüm */}
+          <img
             src={isDark ? "/assets/landing/hero_bg.png" : "/assets/landing/day.png"}
-            alt="" 
-            className="lp-hero-img" 
-          />        
+            alt=""
+            className="lp-hero-img"
+          />
+        </picture>        
         <div className="lp-hero-overlay" />
         <div className="lp-hero-content">
           <motion.div className="lp-hero-text" initial="hidden" animate="visible" variants={stagger(0.1)}>
@@ -82,12 +90,11 @@ export default function LandingPage() {
             </motion.h1>
             <motion.p className="lp-hero-sub" variants={fadeUp(0.12)}>
               {lang==='tr'
-                ? 'Çocuğunuza özel, her gece farklı bir uyku masalı oluşturun. Karakterleri siz seçin, sihri biz yaratalım!'
+                ? 'Çocuğunuza özel, her seferinde farklı bir uyku masalı oluşturun. Karakterleri siz seçin, sihri biz yaratalım!'
                 : 'Create unique bedtime stories tailored for your child every night. You choose the characters, we weave the magic!'}
             </motion.p>
             <motion.div className="lp-hero-btns" variants={fadeUp(0.18)}>
               <Link to="/register" className="lp-btn-primary">{lang==='tr' ? 'Ücretsiz Başla ★' : 'Get Started — Free ★'}</Link>
-              <Link to="/login"    className="lp-btn-ghost">{lang==='tr' ? 'Giriş Yap' : 'Log In'}</Link>
             </motion.div>
           </motion.div>
         </div>
@@ -224,7 +231,7 @@ export default function LandingPage() {
             {/* Kolon 1 — Marka */}
             <motion.div className="lp-footer-col lp-footer-brand" variants={fadeUp()}>
               <img src={isDark ? '/assets/landing/logo1.png' : '/assets/landing/logo2.png'} alt="Masalmatik" className="lp-footer-logo" />
-              <span className="lp-footer-name"></span>
+ fbea95c (responsive)
               <p className="lp-footer-slogan">
                 {lang==='tr' ? 'Küçük hayalciler için sevgiyle yapıldı.' : 'Made with love for little dreamers.'}
               </p>
