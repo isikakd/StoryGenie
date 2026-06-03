@@ -50,9 +50,15 @@ router.get('/my', protect, async (req, res) => {
     const limit = Math.min(50, parseInt(req.query.limit) || 10);
     const skip  = (page - 1) * limit;
 
+    const sortParam = req.query.sort || 'new';
+    let sortQuery = { createdAt: -1 };
+    if (sortParam === 'old') sortQuery = { createdAt: 1 };
+    if (sortParam === 'az')  sortQuery = { title: 1 };
+    if (sortParam === 'za')  sortQuery = { title: -1 };
+
     const [stories, total] = await Promise.all([
       Story.find({ author: req.user._id })
-        .sort({ createdAt: -1 })
+        .sort(sortQuery)
         .skip(skip)
         .limit(limit)
         .select('-pages -fullText'),
@@ -87,22 +93,11 @@ router.get('/explore', async (req, res) => {
     const filter = { isPublic: true };
     if (req.query.language) filter['options.storyLanguage'] = req.query.language;
     if (req.query.ageGroup) filter['options.childAge'] = parseInt(req.query.ageGroup);
+    if (req.query.duration) filter['options.duration'] = req.query.duration;
 
     const sortParam = req.query.sort || 'new';
-    let sortQuery = { createdAt: -1 };
-    if (sortParam === 'liked')    sortQuery = { communityAverageRating: -1, createdAt: -1 };
-    if (sortParam === 'mostRead') sortQuery = { viewCount: -1, createdAt: -1 };
 
-    const [stories, total] = await Promise.all([
-      Story.find(filter)
-        .sort(sortQuery)
-        .skip(skip).limit(limit)
-        .populate('author', 'username avatar avatarBg')
-        .select('-pages -fullText'),
-      Story.countDocuments(filter),
-    ]);
-
-    // Kullanıcı giriş yapmışsa hangi hikayeleri beğendiğini ekle
+    // Kullanıcı kimliğini belirle
     let userId = null;
     try {
       const authHeader = req.headers.authorization;
@@ -112,13 +107,47 @@ router.get('/explore', async (req, res) => {
       }
     } catch (_) {}
 
+    let stories;
+    const total = await Story.countDocuments(filter);
+
+    if (sortParam === 'liked') {
+      // Beğeni sayısına göre sıralama — array $size ile aggregation gerekli
+      stories = await Story.aggregate([
+        { $match: filter },
+        { $addFields: { _likeCount: { $size: { $ifNull: ['$communityRatings', []] } } } },
+        { $sort: { _likeCount: -1, createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'author',
+            foreignField: '_id',
+            as: 'authorArr',
+            pipeline: [{ $project: { username: 1, avatar: 1, avatarBg: 1 } }],
+          },
+        },
+        { $addFields: { author: { $arrayElemAt: ['$authorArr', 0] } } },
+        { $project: { pages: 0, fullText: 0, authorArr: 0, _likeCount: 0 } },
+      ]);
+    } else {
+      let sortQuery = { createdAt: -1 };
+      if (sortParam === 'mostRead') sortQuery = { viewCount: -1, createdAt: -1 };
+
+      const raw = await Story.find(filter)
+        .sort(sortQuery)
+        .skip(skip).limit(limit)
+        .populate('author', 'username avatar avatarBg')
+        .select('-pages -fullText');
+      stories = raw.map(s => s.toObject());
+    }
+
     const storiesWithLike = stories.map(s => {
-      const obj = s.toObject();
-      obj.likeCount = s.communityRatings?.length || 0;
-      obj.isLikedByMe = userId
-        ? s.communityRatings?.some(r => r.user.toString() === userId.toString())
+      s.likeCount = s.communityRatings?.length || 0;
+      s.isLikedByMe = userId
+        ? s.communityRatings?.some(r => r.user?.toString() === userId.toString())
         : false;
-      return obj;
+      return s;
     });
 
     res.json({ stories: storiesWithLike, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } });

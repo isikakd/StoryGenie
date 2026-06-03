@@ -51,11 +51,7 @@ export default function Navbar() {
         {/* Marka logosu */}
         <Link to="/" className="navbar-logo">
           <img
-            src={
-              dark || (!user && location.pathname === '/')
-                ? '/assets/landing/logo1.png'
-                : '/assets/landing/logo2.png'
-            }
+            src={dark ? '/assets/landing/logo1.png' : '/assets/landing/logo2.png'}
             alt="Masalmatik"
             className="logo-img"
           />

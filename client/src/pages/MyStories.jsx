@@ -63,11 +63,6 @@ function StoryCard({ story, onTogglePublish, onRead, onToggleFavorite, onDelete,
           </span>
         )}
 
-        {/* Favori yıldızı — sol alt */}
-        <button className={`sc-fav-btn ${fav ? 'sc-fav-btn--active' : ''}`} onClick={handleFav}
-          title={fav ? (lang === 'tr' ? 'Favorilerden çıkar' : 'Remove from favorites') : (lang === 'tr' ? 'Favorilere ekle' : 'Add to favorites')}>
-          {fav ? '⭐' : '☆'}
-        </button>
 
         {/* Karakterler */}
         <div className="sc-chars-row" style={{ '--char-count': chars.length || 1 }}>
@@ -138,6 +133,10 @@ function StoryCard({ story, onTogglePublish, onRead, onToggleFavorite, onDelete,
 
         {/* Aksiyonlar */}
         <div className="sc-actions">
+          <button className={`sc-fav-btn ${fav ? 'sc-fav-btn--active' : ''}`} onClick={handleFav}
+            title={fav ? (lang === 'tr' ? 'Favorilerden çıkar' : 'Remove from favorites') : (lang === 'tr' ? 'Favorilere ekle' : 'Add to favorites')}>
+            {fav ? '⭐' : '☆'}
+          </button>
           <button className="sc-btn sc-btn--primary" onClick={() => onRead(story._id)}>
             📖 {lang === 'tr' ? 'Oku' : 'Read'}
           </button>
@@ -197,12 +196,12 @@ export default function MyStories() {
   const fetchStories = useCallback(async (p = 1) => {
     setLoading(true);
     try {
-      const res = await api.get(`/stories/my?page=${p}&limit=9`);
+      const res = await api.get(`/stories/my?page=${p}&limit=9&sort=${sortBy}`);
       setStories(res.data.stories);
       setTotalPages(res.data.pagination.totalPages);
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
-  }, []);
+  }, [sortBy]);
 
   useEffect(() => { fetchStories(page); }, [page, fetchStories]);
 
@@ -246,10 +245,8 @@ export default function MyStories() {
 
   // Sıralama seçenekleri
   const sortOptions = [
-    { key: 'new', label: lang === 'tr' ? 'En Yeni'        : 'Newest'    },
-    { key: 'old', label: lang === 'tr' ? 'En Eski'        : 'Oldest'    },
-    { key: 'az',  label: lang === 'tr' ? 'Ada Göre (A-Z)' : 'Name A-Z'  },
-    { key: 'za',  label: lang === 'tr' ? 'Ada Göre (Z-A)' : 'Name Z-A'  },
+    { key: 'new', label: lang === 'tr' ? 'En Yeni' : 'Newest' },
+    { key: 'old', label: lang === 'tr' ? 'En Eski' : 'Oldest' },
   ];
 
   const activeFilterCount = [filterAge, filterLang, filterDuration].filter(Boolean).length;
@@ -259,19 +256,13 @@ export default function MyStories() {
       ? stories.filter(s => favorites.includes(s._id))
       : [...stories];
 
-    // Filtrele (client-side)
+    // Filtrele (client-side — sayfa içi dar aralık, sort server-side)
     if (filterAge)      data = data.filter(s => String(s.options?.childAge) === filterAge);
     if (filterLang)     data = data.filter(s => s.options?.storyLanguage === filterLang);
     if (filterDuration) data = data.filter(s => s.options?.duration === filterDuration);
 
-    // Sırala
-    if (sortBy === 'new') data = [...data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    if (sortBy === 'old') data = [...data].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    if (sortBy === 'az')  data = [...data].sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-    if (sortBy === 'za')  data = [...data].sort((a, b) => (b.title || '').localeCompare(a.title || ''));
-
     return data;
-  }, [stories, favorites, activeTab, sortBy, filterAge, filterLang, filterDuration]);
+  }, [stories, favorites, activeTab, filterAge, filterLang, filterDuration]);
 
   return (
     <div className="my-stories-page">
@@ -311,7 +302,7 @@ export default function MyStories() {
                   {sortOptions.map(opt => (
                     <button key={opt.key}
                       className={`ms-dropdown-item ${sortBy === opt.key ? 'active' : ''}`}
-                      onClick={() => { setSortBy(opt.key); setShowSort(false); }}>
+                      onClick={() => { setSortBy(opt.key); setShowSort(false); setPage(1); }}>
                       {opt.label}
                     </button>
                   ))}

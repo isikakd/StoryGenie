@@ -241,13 +241,9 @@ export default function StoryView() {
 
           {/* Sesli okuma bar */}
           <div className="sv-mobile-tts">
-            <button className={`sv-mobile-tts-btn ${speaking && !paused ? 'active' : ''}`} onClick={handleReadPage}>
-              {speaking && !paused ? '⏸' : paused ? '▶' : '▶'}
-              <span>{lang === 'tr' ? (paused ? 'Devam' : 'Sayfayı Oku') : (paused ? 'Resume' : 'Read Page')}</span>
-            </button>
             <button className={`sv-mobile-tts-btn ${readAll ? 'active' : ''}`} onClick={handleReadAll}>
               {readAll ? '⏹' : '📖'}
-              <span>{lang === 'tr' ? (readAll ? 'Durdur' : 'Tümünü Oku') : (readAll ? 'Stop' : 'Read All')}</span>
+              <span>{lang === 'tr' ? (readAll ? 'Durdur' : 'Masalı Oku') : (readAll ? 'Stop' : 'Read Story')}</span>
             </button>
           </div>
 

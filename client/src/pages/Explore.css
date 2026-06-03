@@ -247,8 +247,9 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.18s;
+  color: rgba(200,185,255,0.85);
 }
-[data-theme="light"] .ec-fav-btn { border-color: rgba(117,70,104,0.2); }
+[data-theme="light"] .ec-fav-btn { border-color: rgba(117,70,104,0.2); color: rgba(60,40,90,0.5); }
 .ec-fav-btn:hover     { transform: scale(1.12); border-color: #f59e0b; background: rgba(245,158,11,0.08); }
 .ec-fav-btn--active   { border-color: #f59e0b; background: rgba(255,220,50,0.15); }
 

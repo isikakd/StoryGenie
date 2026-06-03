@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../context/LangContext';
 import { useAuth } from '../context/AuthContext';
@@ -9,8 +9,6 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
   const [liked, setLiked]         = useState(story.isLikedByMe || false);
   const [likeCount, setLikeCount] = useState(story.likeCount || story.communityRatings?.length || 0);
   const [likeLoading, setLikeLoading] = useState(false);
-  const [userRating, setUserRating] = useState(0);
-  const [rated, setRated]         = useState(false);
   const [favorited, setFavorited] = useState(isFavorited || false);
 
   const chars       = story.options?.characters || [];
@@ -63,11 +61,6 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
     const next = !favorited;
     setFavorited(next);
     await onFavorite(story._id, next);
-  };
-
-  const handleRate = async (val) => {
-    setUserRating(val); setRated(true);
-    await onRate(story._id, val);
   };
 
   const durationLabel = (d) => {
@@ -172,7 +165,7 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
             </button>
           )}
           <button className="ec-read-btn" onClick={() => onRate(story._id, 0, true)}>
-            {lang === 'tr' ? 'Oku' : 'Read'}
+            📖 {lang === 'tr' ? 'Oku' : 'Read'}
           </button>
         </div>
       </div>
@@ -202,18 +195,29 @@ export default function Explore() {
   const [showFilters, setShowFilters]     = useState(false);
   const [showSort, setShowSort]           = useState(false);
   const [filterDuration, setFilterDuration] = useState('');
+  const sortRef   = useRef(null);
+  const filterRef = useRef(null);
+
+  // Dropdown dışına tıklanınca kapat
+  useEffect(() => {
+    const handler = (e) => {
+      if (sortRef.current   && !sortRef.current.contains(e.target))   setShowSort(false);
+      if (filterRef.current && !filterRef.current.contains(e.target)) setShowFilters(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const fetchStories = useCallback(async (p = 1) => {
     setLoading(true);
     try {
       let url = `/stories/explore?page=${p}&limit=12`;
-      if (sortBy && sortBy !== 'all') url += `&sort=${sortBy}`;
-      if (filterAge)  url += `&ageGroup=${filterAge}`;
-      if (filterLang) url += `&language=${filterLang}`;
+      if (sortBy)        url += `&sort=${sortBy}`;
+      if (filterAge)     url += `&ageGroup=${filterAge}`;
+      if (filterLang)    url += `&language=${filterLang}`;
+      if (filterDuration) url += `&duration=${filterDuration}`;
       const res = await api.get(url);
       let data = res.data.stories;
-
-      if (filterDuration) data = data.filter(s => s.options?.duration === filterDuration);
 
       setStories(data);
       setTotalPages(res.data.pagination.totalPages);
@@ -295,8 +299,8 @@ export default function Explore() {
         <div className="exp-toolbar animate-fadeIn">
           <div className="exp-toolbar-left">
             {/* Tümü */}
-            <button className={`exp-tab ${sortBy === 'all' && !showFavorites ? 'active' : ''}`}
-              onClick={() => { setSortBy('all'); setPage(1); setShowFavorites(false); }}>
+            <button className={`exp-tab ${!showFavorites ? 'active' : ''}`}
+              onClick={() => { setSortBy('new'); setFilterAge(''); setFilterLang(''); setFilterDuration(''); setPage(1); setShowFavorites(false); }}>
               {lang === 'tr' ? 'Tümü' : 'All'}
               <span className="exp-tab-count">{stories.length}</span>
             </button>
@@ -312,13 +316,11 @@ export default function Explore() {
             )}
 
             {/* Sırala */}
-            <div className="exp-dropdown-wrap">
-              <button className={`exp-tab ${['new','liked','mostRead'].includes(sortBy) ? 'active' : ''}`}
+            <div className="exp-dropdown-wrap" ref={sortRef}>
+              <button className={`exp-tab ${sortBy !== 'new' ? 'active' : ''}`}
                 onClick={() => { setShowSort(s => !s); setShowFilters(false); }}>
                 ↕ {lang === 'tr' ? 'Sırala' : 'Sort'}
-                {['new','liked','mostRead'].includes(sortBy) && (
-                  <span className="exp-active-label"> · {sortOptions.find(o => o.key === sortBy)?.label}</span>
-                )}
+                <span className="exp-active-label"> · {sortOptions.find(o => o.key === sortBy)?.label}</span>
               </button>
               {showSort && (
                 <div className="exp-dropdown exp-dropdown--right">
@@ -334,8 +336,8 @@ export default function Explore() {
             </div>
 
             {/* Filtrele */}
-            <div className="exp-dropdown-wrap">
-              <button className={`exp-tab ${showFilters ? 'active' : ''}`}
+            <div className="exp-dropdown-wrap" ref={filterRef}>
+              <button className={`exp-tab ${filterAge || filterLang || filterDuration ? 'active' : ''}`}
                 onClick={() => { setShowFilters(s => !s); setShowSort(false); }}>
                  {lang === 'tr' ? 'Filtrele' : 'Filter'}
                 {(filterAge || filterLang || filterDuration) && <span className="exp-filter-dot" />}
