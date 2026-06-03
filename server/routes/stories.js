@@ -88,9 +88,14 @@ router.get('/explore', async (req, res) => {
     if (req.query.language) filter['options.storyLanguage'] = req.query.language;
     if (req.query.ageGroup) filter['options.childAge'] = parseInt(req.query.ageGroup);
 
+    const sortParam = req.query.sort || 'new';
+    let sortQuery = { createdAt: -1 };
+    if (sortParam === 'liked')    sortQuery = { communityAverageRating: -1, createdAt: -1 };
+    if (sortParam === 'mostRead') sortQuery = { viewCount: -1, createdAt: -1 };
+
     const [stories, total] = await Promise.all([
       Story.find(filter)
-        .sort({ communityAverageRating: -1, createdAt: -1 })
+        .sort(sortQuery)
         .skip(skip).limit(limit)
         .populate('author', 'username avatar avatarBg')
         .select('-pages -fullText'),
@@ -274,16 +279,22 @@ router.post('/:id/like', protect, async (req, res) => {
     if (!story || !story.isPublic) return res.status(404).json({ error: 'Hikaye bulunamadı.' });
     if (story.isAnonymized) return res.status(403).json({ error: 'Anonim hikayeler beğenilemez.' });
 
-    const userId      = req.user._id.toString();
-    const ownerId     = story.author.toString();
+    const userId       = req.user._id.toString();
+    const ownerId      = story.author.toString();
     const alreadyLiked = story.communityRatings.some(r => r.user.toString() === userId);
 
-    if (!alreadyLiked) {
-      story.communityRatings.push({ user: req.user._id, rating: 5 });
-      story.recalculateCommunityRating();
-      await story.save();
+    if (alreadyLiked) {
+      // MongoDB $pull — Mongoose array metodlarını bypass eder, garantili çalışır
+      await Story.updateOne(
+        { _id: story._id },
+        { $pull: { communityRatings: { user: req.user._id } } }
+      );
+    } else {
+      await Story.updateOne(
+        { _id: story._id },
+        { $push: { communityRatings: { user: req.user._id, rating: 5 } } }
+      );
 
-      // Hikaye sahibi kendisini beğenemez; bildirim tercihi kontrol edilir
       if (ownerId !== userId) {
         const owner = await User.findById(ownerId).select('email username notifications');
         if (owner?.notifications?.notifyOnLike) {
@@ -298,11 +309,17 @@ router.post('/:id/like', protect, async (req, res) => {
       }
     }
 
+    // Güncel dokümanı çek, ortalamayı hesapla ve kaydet
+    const updated = await Story.findById(story._id);
+    updated.recalculateCommunityRating();
+    await updated.save();
+
     res.json({
-      liked: true,
-      likeCount: story.communityRatings.length,
+      liked:     !alreadyLiked,
+      likeCount: updated.communityRatings.length,
     });
   } catch (err) {
+    console.error('Like error:', err);
     res.status(500).json({ error: 'Beğeni kaydedilemedi.' });
   }
 });

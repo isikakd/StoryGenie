@@ -46,6 +46,8 @@ export default function Profile() {
   const [pwLoading, setPwLoading] = useState(false);
   const [showPw, setShowPw]     = useState({ current: false, next: false, confirm: false });
   const [showPwModal, setShowPwModal] = useState(false);
+  const [forgotPwSent, setForgotPwSent]       = useState(false);
+  const [forgotPwLoading, setForgotPwLoading] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteStep, setDeleteStep]           = useState(1);   // 1: hikaye tercihi, 2: final onay
@@ -112,6 +114,19 @@ export default function Profile() {
     } catch (err) {
       setProfileMsg({ text: err.message, ok: false });
     } finally { setProfileLoading(false); }
+  };
+
+  const handleForgotFromModal = async () => {
+    if (forgotPwLoading || forgotPwSent) return;
+    setForgotPwLoading(true);
+    try {
+      await api.post('/auth/forgot-password', { email: user.email });
+    } catch {
+      // Her zaman başarı göster — e-posta enumeration önlemi
+    } finally {
+      setForgotPwSent(true);
+      setForgotPwLoading(false);
+    }
   };
 
   const handleChangePassword = async (e) => {
@@ -349,7 +364,7 @@ export default function Profile() {
 
       {/* ŞİFRE DEĞİŞTİR MODALI */}
       {showPwModal && (
-        <div className="prof-modal-overlay" onClick={() => { setShowPwModal(false); setPwMsg({ text: '', ok: true }); setPw({ current: '', next: '', confirm: '' }); }}>
+        <div className="prof-modal-overlay" onClick={() => { setShowPwModal(false); setPwMsg({ text: '', ok: true }); setPw({ current: '', next: '', confirm: '' }); setForgotPwSent(false); }}>
           <div className="prof-modal" onClick={e => e.stopPropagation()}>
             <h3 className="prof-modal-title">🔒 {tr ? 'Şifre Değiştir' : 'Change Password'}</h3>
             <form onSubmit={handleChangePassword} className="prof-form">
@@ -375,11 +390,15 @@ export default function Profile() {
                 </div>
               ))}
               {pwMsg.text && <p className={`prof-msg ${pwMsg.ok ? 'ok' : 'err'}`}>{pwMsg.text}</p>}
+              <div className="prof-forgot-link-wrap">
+                {forgotPwSent
+                  ? <span className="prof-forgot-sent">✉️ {tr ? 'Sıfırlama bağlantısı e-postanıza gönderildi!' : 'Reset link sent to your email!'}</span>
+                  : <button type="button" className="prof-forgot-link" onClick={handleForgotFromModal} disabled={forgotPwLoading}>
+                      {forgotPwLoading ? '⏳' : (tr ? 'Şifremi unuttum' : 'Forgot password?')}
+                    </button>
+                }
+              </div>
               <div className="prof-modal-actions">
-                <button type="button" className="prof-btn prof-btn--ghost"
-                  onClick={() => navigate('/forgot-password')}>
-                  {tr ? 'Şifremi unuttum' : 'Forgot password?'}
-                </button>
                 <button type="submit" className="prof-btn prof-btn--primary" disabled={pwLoading}>
                   {pwLoading ? '⏳' : (tr ? 'Güncelle' : 'Update')}
                 </button>

@@ -350,6 +350,19 @@
 [data-theme="light"] .prof-modal-desc { color: rgba(60,40,90,0.55); }
 .prof-modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
 
+.prof-forgot-link-wrap { display: flex; align-items: center; margin-top: 2px; margin-bottom: -2px; }
+.prof-forgot-link {
+  background: none; border: none; padding: 0;
+  font-size: 0.78rem; color: rgba(160,140,210,0.75);
+  cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+.prof-forgot-link:hover { color: rgba(160,140,210,1); }
+.prof-forgot-link:disabled { opacity: 0.5; cursor: default; }
+[data-theme="light"] .prof-forgot-link { color: rgba(100,70,150,0.6); }
+[data-theme="light"] .prof-forgot-link:hover { color: rgba(100,70,150,0.9); }
+.prof-forgot-sent { font-size: 0.78rem; color: #10b981; font-weight: 600; }
+
 @keyframes popIn {
   from { transform: scale(0.92); opacity: 0; }
   to   { transform: scale(1);    opacity: 1; }

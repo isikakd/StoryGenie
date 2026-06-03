@@ -8,6 +8,7 @@ import './Explore.css';
 function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, lang }) {
   const [liked, setLiked]         = useState(story.isLikedByMe || false);
   const [likeCount, setLikeCount] = useState(story.likeCount || story.communityRatings?.length || 0);
+  const [likeLoading, setLikeLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
   const [rated, setRated]         = useState(false);
   const [favorited, setFavorited] = useState(isFavorited || false);
@@ -40,11 +41,21 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
   const badge = getBadge();
 
   const handleLike = async () => {
-    if (liked || story.isAnonymized) return;
-    setLiked(true);
-    setLikeCount(c => c + 1);
+    if (story.isAnonymized || likeLoading) return;
+    const prev = liked;
+    const next = !liked;
+    setLikeLoading(true);
+    setLiked(next);
+    setLikeCount(c => next ? c + 1 : c - 1);
     const result = await onLike(story._id);
-    if (result?.likeCount !== undefined) setLikeCount(result.likeCount);
+    setLikeLoading(false);
+    if (result?.likeCount !== undefined) {
+      setLiked(result.liked);
+      setLikeCount(result.likeCount);
+    } else {
+      setLiked(prev);
+      setLikeCount(c => next ? c - 1 : c + 1);
+    }
   };
 
   const handleFavorite = async (e) => {
@@ -85,19 +96,6 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
           })}
         </div>
         {badge && <span className={`ec-badge ${badge.cls}`}>{badge.label}</span>}
-        <button className="ec-like-btn" onClick={handleLike}
-          disabled={story.isAnonymized}
-          title={story.isAnonymized ? 'Anonim masallar beğenilemez' : undefined}>
-          <span>{liked ? '❤️' : '🤍'}</span>
-          <span>{likeCount}</span>
-        </button>
-        {onFavorite && (
-          <button className={`ec-fav-btn${favorited ? ' ec-fav-btn--active' : ''}`}
-            onClick={handleFavorite}
-            title={favorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}>
-            {favorited ? '⭐' : '☆'}
-          </button>
-        )}
       </div>
 
       <div className="ec-body">
@@ -161,11 +159,18 @@ function CommunityStoryCard({ story, onRate, onLike, onFavorite, isFavorited, la
 
         <div className="ec-footer">
           <button className="ec-heart-btn" onClick={handleLike}
-            disabled={story.isAnonymized}
+            disabled={story.isAnonymized || likeLoading}
             title={story.isAnonymized ? 'Anonim masallar beğenilemez' : undefined}>
             <span>{liked ? '❤️' : '🤍'}</span>
             <span>{likeCount}</span>
           </button>
+          {onFavorite && (
+            <button className={`ec-fav-btn${favorited ? ' ec-fav-btn--active' : ''}`}
+              onClick={handleFavorite}
+              title={favorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}>
+              {favorited ? '⭐' : '☆'}
+            </button>
+          )}
           <button className="ec-read-btn" onClick={() => onRate(story._id, 0, true)}>
             {lang === 'tr' ? 'Oku' : 'Read'}
           </button>
@@ -202,15 +207,13 @@ export default function Explore() {
     setLoading(true);
     try {
       let url = `/stories/explore?page=${p}&limit=12`;
+      if (sortBy && sortBy !== 'all') url += `&sort=${sortBy}`;
       if (filterAge)  url += `&ageGroup=${filterAge}`;
       if (filterLang) url += `&language=${filterLang}`;
       const res = await api.get(url);
       let data = res.data.stories;
 
-      if (sortBy === 'new')      data = [...data].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-      if (sortBy === 'liked')    data = [...data].sort((a,b) => (b.communityRatings?.length||0) - (a.communityRatings?.length||0));
-      if (sortBy === 'mostRead') data = [...data].sort((a,b) => (b.viewCount||0) - (a.viewCount||0));
-      if (filterDuration)        data = data.filter(s => s.options?.duration === filterDuration);
+      if (filterDuration) data = data.filter(s => s.options?.duration === filterDuration);
 
       setStories(data);
       setTotalPages(res.data.pagination.totalPages);

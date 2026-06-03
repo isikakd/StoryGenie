@@ -82,8 +82,12 @@ export default function CreateStory() {
 
   const goBack = () => { setValidError(''); setStep(s => s - 1); };
 
-  const applyQuickPrompt = (p) =>
+  const [usedPrompts, setUsedPrompts] = useState(new Set());
+
+  const applyQuickPrompt = (p) => {
     setCustomPrompt(prev => prev ? prev + ' ' + p : p);
+    setUsedPrompts(prev => new Set([...prev, p]));
+  };
 
   const handleGenerate = async () => {
     if (selectedChars.length === 0) { setValidError(t.create.selectChar); return; }
@@ -178,16 +182,28 @@ export default function CreateStory() {
         {/* ── SEÇİLEN ÖZET ── */}
         {selectedChars.length > 0 && (
           <div className="selection-summary animate-fadeIn">
-            {selectedChars.map(c => (
-              <button key={c.id}
-                className={`sum-chip ${c.id.startsWith('animal') ? 'sum-chip--animal' : ''}`}
-                onClick={() => toggleChar(c)}>
-                <img src={`/assets/characters/${c.file}`} alt=""
-                  onError={e => { e.target.style.display='none'; }} />
-                <span>{c.name[lang] || c.name.tr}</span>
-                <span className="sum-remove">✕</span>
-              </button>
-            ))}
+            {selectedChars.map(c => {
+              const isAnimal  = c.id.startsWith('animal');
+              const kidCount  = selectedChars.filter(x => !x.id.startsWith('animal')).length;
+              const removable = !generating && (isAnimal || kidCount > 1);
+              return removable ? (
+                <button key={c.id}
+                  className={`sum-chip ${isAnimal ? 'sum-chip--animal' : ''}`}
+                  onClick={() => toggleChar(c)}>
+                  <img src={`/assets/characters/${c.file}`} alt=""
+                    onError={e => { e.target.style.display='none'; }} />
+                  <span>{c.name[lang] || c.name.tr}</span>
+                  <span className="sum-remove">✕</span>
+                </button>
+              ) : (
+                <div key={c.id}
+                  className={`sum-chip ${isAnimal ? 'sum-chip--animal' : ''}`}>
+                  <img src={`/assets/characters/${c.file}`} alt=""
+                    onError={e => { e.target.style.display='none'; }} />
+                  <span>{c.name[lang] || c.name.tr}</span>
+                </div>
+              );
+            })}
             {selectedLocation && (
               <div className="sum-chip sum-chip--loc">
                 <img src={`/assets/locations/${selectedLocation.file}`} alt=""
@@ -416,7 +432,7 @@ export default function CreateStory() {
                   <div className="quick-row">
                     <span className="quick-label">{t.create.quickPrompts}</span>
                     <div className="quick-chips">
-                      {t.create.prompts.map((p, i) => (
+                      {t.create.prompts.filter(p => !usedPrompts.has(p)).map((p, i) => (
                         <button key={i} type="button" className="quick-chip"
                           onClick={() => applyQuickPrompt(p)}>{p}</button>
                       ))}

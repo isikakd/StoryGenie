@@ -236,23 +236,21 @@
   color: #fff;
 }
 
-/* Favori (yıldız) butonu — cover sol alt, sc-fav-btn ile birebir aynı */
+/* Favori (yıldız) butonu — footer içinde inline */
 .ec-fav-btn {
-  position: absolute;
-  bottom: 10px; left: 10px;
-  z-index: 4;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  border-radius: 50%;
-  width: 32px; height: 32px;
-  font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1.5px solid rgba(200,185,255,0.25);
+  border-radius: 10px;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.18s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.ec-fav-btn:hover     { transform: scale(1.15); }
-.ec-fav-btn--active   { background: rgba(255,220,50,0.95); }
+[data-theme="light"] .ec-fav-btn { border-color: rgba(117,70,104,0.2); }
+.ec-fav-btn:hover     { transform: scale(1.12); border-color: #f59e0b; background: rgba(245,158,11,0.08); }
+.ec-fav-btn--active   { border-color: #f59e0b; background: rgba(255,220,50,0.15); }
 
 /* ── Bilgi alanı ── */
 .ec-body {

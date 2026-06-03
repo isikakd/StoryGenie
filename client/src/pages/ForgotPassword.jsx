@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../context/LangContext';
 import api from '../services/api';
 import './Auth.css';
 
+function useIsDark() {
+  const [isDark, setIsDark] = useState(
+    () => document.documentElement.getAttribute('data-theme') === 'dark'
+  );
+  useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setIsDark(document.documentElement.getAttribute('data-theme') === 'dark')
+    );
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
+
 export default function ForgotPassword() {
   const { t } = useLang();
+  const isDark = useIsDark();
   const [email, setEmail]     = useState('');
   const [error, setError]     = useState('');
   const [sent, setSent]       = useState(false);
@@ -33,11 +48,8 @@ export default function ForgotPassword() {
 
       <div className="auth-card animate-fadeIn">
         <div className="auth-header">
-          <div className="auth-moon-icon">
-            <svg viewBox="0 0 48 48" width="52" height="52" fill="none">
-              <circle cx="24" cy="24" r="23" fill="rgba(117,70,104,0.3)" stroke="rgba(210,195,255,0.25)" strokeWidth="1"/>
-              <text x="24" y="31" textAnchor="middle" fontSize="22">🔑</text>
-            </svg>
+          <div className="auth-logo-icon">
+            <img src={isDark ? '/assets/landing/logo1.png' : '/assets/landing/logo2.png'} alt="MasalMatik" />
           </div>
           <h1 className="auth-title">{t.forgotPassword.title}</h1>
           <p className="auth-subtitle">{t.forgotPassword.subtitle}</p>
